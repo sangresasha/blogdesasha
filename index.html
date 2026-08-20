@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blog de Sasha</title>
+
+<!-- ── PRECARGA DE LA FUENTE LOCAL (Para evitar el Comic Sans) ── -->
+<link rel="preload" href="fonts/PUNKBABE TRIAL.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+
 <style>
 /* ── FUENTE LOCAL ── */
 @font-face {
@@ -40,30 +44,33 @@ body {
   line-height: 1.7;
   min-height: 100vh;
   overflow-x: hidden;
-  /* Añadimos sombra al texto para que las letras negras se vean sobre las manchas negras */
+  /* Sombra al texto para que las letras negras destaquen sobre el fondo */
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
-/* ── GIF/IMAGEN DE FONDO CON MEZCLA DE COLORES ── */
-body::before {
+/* ── GIF/IMAGEN DE FONDO (SOLO EN LA PÁGINA DEL BLOG) ── */
+#page-blog::before {
   content: '';
   position: fixed;
   inset: 0;
   background: url('picmix.com_2174009.gif') center/cover no-repeat;
-  /* Esto multiplica el rojo del gif con el fondo de la página y lo integra */
+  /* Mezcla de colores para integrar el rojo */
   mix-blend-mode: multiply;
-  opacity: 0.4; /* Controla la intensidad del patrón */
+  /* Opacidad reducida para que se vea más suave */
+  opacity: 0.4;
+  /* Difuminado sutil para que las manchas no sean tan duras */
+  filter: blur(2px);
   z-index: 0;
   pointer-events: none;
 }
 
-/* Asegura que todo el contenido quede por encima */
-body > * {
+/* Asegura que el contenido del blog quede por encima del GIF */
+#page-blog > * {
   position: relative;
   z-index: 1;
 }
 
-/* ── EFECTO DE RUIDO (opcional, muy leve) ── */
+/* ── EFECTO DE RUIDO (sutil, aplica a toda la página, incluso al inicio) ── */
 body::after {
   content: '';
   position: fixed;

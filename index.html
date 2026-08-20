@@ -508,7 +508,7 @@ function formatFecha(ts) {
 async function requestNotificationPermission() {
   try {
     const token = await getToken(messaging, { 
-      vapidKey: "TU_VAPID_KEY_AQUI" // <--- Reemplazá esto con la clave que generaste en Firebase
+      vapidKey: BHTbHz3hcIPushStuBLzB5LMrhwGyzEz6_AcoHSIzaTC5J40-JfalSUdpugCuHLeRos0TRr6XYvXEuXAZ6XQB2Y // <--- Reemplazá esto con la clave que generaste en Firebase
     });
     console.log("Token de notificaciones:", token);
     // Aquí podrías guardar este 'token' en la base de datos para enviarle notificaciones específicas al usuario

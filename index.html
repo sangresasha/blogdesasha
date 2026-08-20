@@ -40,17 +40,19 @@ body {
   line-height: 1.7;
   min-height: 100vh;
   overflow-x: hidden;
+  /* Añadimos sombra al texto para que las letras negras se vean sobre las manchas negras */
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
-/* ── GIF SUPERPUESTO CON CAPA OSCURA ── */
+/* ── GIF/IMAGEN DE FONDO CON MEZCLA DE COLORES ── */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: 
-    rgba(0, 0, 0, 0.7),  /* capa negra semitransparente para oscurecer */
-    url('picmix.com_2174009.gif') center/cover no-repeat;
-  opacity: 0.4; /* reducimos la opacidad global para que sea muy sutil */
+  background: url('picmix.com_2174009.gif') center/cover no-repeat;
+  /* Esto multiplica el rojo del gif con el fondo de la página y lo integra */
+  mix-blend-mode: multiply;
+  opacity: 0.4; /* Controla la intensidad del patrón */
   z-index: 0;
   pointer-events: none;
 }

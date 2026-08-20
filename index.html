@@ -532,17 +532,17 @@ onMessage(messaging, (payload) => {
   console.log("Mensaje recibido en primer plano:", payload);
 });
 
-// ── LÓGICA DE LIKES ──
+// ── LÓGICA DE LIKES (CORREGIDA PARA QUE NO SE CAIGAN) ──
 async function toggleLike(postId) {
   const postRef = doc(db, 'fosa_posts', postId);
   const likeKey = 'liked_' + postId;
 
   try {
     if (localStorage.getItem(likeKey) === 'true') {
-      await updateDoc(postRef, { likes: increment(-1) });
+      await setDoc(postRef, { likes: increment(-1) }, { merge: true });
       localStorage.removeItem(likeKey);
     } else {
-      await updateDoc(postRef, { likes: increment(1) });
+      await setDoc(postRef, { likes: increment(1) }, { merge: true });
       localStorage.setItem(likeKey, 'true');
     }
   } catch (e) {

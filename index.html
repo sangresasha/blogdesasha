@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog de Sasha</title>
+<style>
+/* ── FUENTE LOCAL ── */
+@font-face {
+  font-family: 'PunkBabeDisplay';
+  src: url('fonts/PUNKBABE TRIAL.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── GOOGLE FONTS PARA EL CUERPO ── */
+@import url('https://fonts.googleapis.com/css2?family=EB+Baskerville:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+:root {
+  --bg: #800000;
+  --surface: #a00000;
+  --border: #660000;
+  --border2: #990000;
+  --text: #000000;
+  --text2: #1a1a1a;
+  --text3: #333333;
+  --display: 'PunkBabeDisplay', 'Pinyon Script', cursive;
+  --body: 'EB Baskerville', 'Georgia', serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 18px;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── GIF SUPERPUESTO SOBRE FONDO ROJO ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: url('picmix.com_2174009.gif') center/cover no-repeat;
+  opacity: 0.4; /* Ajustá este valor (0.1 a 0.8) a tu gusto */
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Asegura que todo el contenido quede por encima del GIF */
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── EFECTO DE RUIDO (opcional, lo dejamos liviano) ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── INICIO ── */
+#page-inicio {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 100vh; text-align: center; padding: 2rem;
+}
+
+.inicio-title {
+  font-family: var(--display);
+  font-size: clamp(4rem, 16vw, 12rem);
+  color: var(--text);
+  letter-spacing: 0.02em; line-height: 0.9; margin-bottom: 3rem;
+}
+
+.inicio-title .line2 { color: var(--text2); }
+
+.inicio-sep {
+  width: 1px; height: 50px;
+  background: linear-gradient(to bottom, transparent, var(--border2), transparent);
+  margin: 0 auto 2.5rem;
+}
+
+.btn-entrar {
+  font-family: var(--body);
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  color: var(--text);
+  background: none;
+  border: 1px solid var(--border2);
+  padding: 0.9rem 3rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.25s;
+}
+
+.btn-entrar:hover { background: rgba(0,0,0,0.1); border-color: var(--text); }
+
+/* ── BLOG ── */
+#page-blog { display: none; }
+
+header { border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+
+.header-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(0,0,0,0.1) 0%, transparent 60%);
+}
+
+.header-inner {
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: end; gap: 2rem;
+  max-width: 960px; margin: 0 auto; padding: 3rem 2rem 2rem;
+}
+
+.header-label {
+  font-family: var(--body);
+  font-size: 0.75rem;
+  color: var(--text2);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.header-title {
+  font-family: var(--display);
+  font-size: clamp(3rem, 8vw, 6rem);
+  color: var(--text);
+  line-height: 0.95;
+}
+
+.header-sub {
+  font-family: var(--body);
+  font-size: 0.75rem;
+  color: var(--text2);
+  letter-spacing: 0.15em;
+  margin-top: 1rem;
+  text-transform: uppercase;
+}
+
+.header-right { text-align: right; padding-bottom: 0.5rem; }
+
+.header-stat {
+  font-family: var(--body);
+  font-size: 0.7rem;
+  color: var(--text2);
+  letter-spacing: 0.1em;
+  line-height: 2;
+  text-transform: uppercase;
+}
+
+.header-stat strong {
+  color: var(--text);
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: block;
+  letter-spacing: 0;
+}
+
+.nav-strip {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-strip-inner {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-id {
+  font-family: var(--body);
+  font-size: 0.7rem;
+  color: var(--text);
+  letter-spacing: 0.15em;
+  padding: 0.8rem 0;
+  text-transform: uppercase;
+}
+
+.btn-admin {
+  font-family: var(--body);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--text);
+  background: none;
+  border: 1px solid var(--border2);
+  padding: 0.35rem 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.btn-admin:hover { background: rgba(0,0,0,0.1); border-color: var(--text); }
+
+main { max-width: 960px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+/* ── ADMIN PANEL ── */
+.admin-panel {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-left: 2px solid var(--text);
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.admin-panel.visible { display: block; }
+
+.admin-panel-title {
+  font-family: var(--body);
+  font-size: 0.75rem;
+  color: var(--text);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+}
+
+.field-group { margin-bottom: 1rem; }
+
+.field-group label {
+  display: block;
+  font-family: var(--body);
+  font-size: 0.7rem;
+  color: var(--text);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.field-group input,
+.field-group textarea {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid var(--border2);
+  color: #000000;
+  font-family: var(--body);
+  font-size: 1rem;
+  padding: 0.6rem 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: vertical;
+}
+
+.field-group input:focus,
+.field-group textarea:focus { border-color: var(--text); }
+
+.field-group input::placeholder,
+.field-group textarea::placeholder { color: var(--text3); }
+
+.field-group textarea { min-height: 180px; }
+
+.panel-actions { display: flex; gap: 0.8rem; margin-top: 1.2rem; flex-wrap: wrap; }
+
+.btn-publish {
+  font-family: var(--body);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: #ffffff;
+  background: #000000;
+  border: 1px solid #000000;
+  padding: 0.55rem 1.6rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.btn-publish:hover { background: var(--text2); border-color: var(--text2); }
+.btn-publish:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-cancel {
+  font-family: var(--body);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--text);
+  background: none;
+  border: 1px solid var(--border2);
+  padding: 0.55rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.btn-cancel:hover { border-color: var(--text); background: rgba(0,0,0,0.05); }
+
+/* ── POSTS HEADER ── */
+.posts-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+}
+
+.posts-header-title {
+  font-family: var(--body);
+  font-size: 0.75rem;
+  color: var(--text2);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.posts-count {
+  font-family: var(--body);
+  font-size: 0.7rem;
+  color: var(--text2);
+  letter-spacing: 0.1em;
+}
+
+/* ── POST CARD ── */
+.post-card {
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--border);
+  animation: fadeUp 0.4s ease both;
+}
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.post-number {
+  font-family: var(--body);
+  font-size: 0.65rem;
+  color: var(--text2);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.post-number::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  max-width: 50px;
+}
+
+.post-title {
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 0.6rem;
+}
+
+.post-meta {
+  font-family: var(--body);
+  font-size: 0.7rem;
+  color: var(--text2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.post-body {
+  font-size: 1.05rem;
+  color: var(--text);
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.post-body-preview { position: relative; }
+
+.post-body-preview.collapsed::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+}
+
+.post-read-more {
+  font-family: var(--body);
+  font-size: 0.75rem;
+  color: var(--text);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  transition: color 0.2s;
+  display: none;
+}
+
+.post-read-more:hover { color: var(--text2); }
+
+.post-admin-actions { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
+
+.btn-edit,
+.btn-delete {
+  font-family: var(--body);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: none;
+  border: 1px solid var(--border2);
+  padding: 0.3rem 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text);
+}
+
+.btn-edit:hover { border-color: var(--text); background: rgba(0,0,0,0.05); }
+.btn-delete:hover { border-color: #000; background: rgba(0,0,0,0.1); }
+
+/* ── COMENTARIOS ── */
+.comments-section { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+
+.comments-toggle {
+  font-family: var(--body);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.comments-toggle:hover { color: var(--text2); }
+.comments-toggle .count-badge { color: var(--text2); }
+
+.comments-body { display: none; margin-top: 1.2rem; }
+.comments-body.open { display: block; }
+
+.comment-list { margin-bottom: 1.2rem; }
+
+.comment-item {
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.comment-item:last-child { border-bottom: none; }
+
+.comment-autor {
+  font-family: var(--body);
+  font-size: 0.7rem;
+  color: var(--text);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.comment-fecha { color: var(--text2); font-size: 0.65rem; }
+
+.comment-texto {
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.comment-form {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-left: 1px solid var(--text);
+  padding: 1rem;
+  margin-top: 0.8rem;
+}
+
+.comment-form-title {
+  font-family: var(--body);
+  font-size: 0.7rem;
+  color: var(--text);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+
+.comment-form input,
+.comment-form textarea {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid var(--border2);
+  color: #000000;
+  font-family: var(--body);
+  font-size: 0.95rem;
+  padding: 0.5rem 0.8rem;
+  outline: none;
+  transition: border-color 0.2s;
+  margin-bottom: 0.6rem;
+  resize: vertical;
+}
+
+.comment-form input:focus,
+.comment-form textarea:focus { border-color: var(--text); }
+
+.comment-form input::placeholder,
+.comment-form textarea::placeholder { color: var(--text3); }
+
+.comment-form textarea { min-height: 80px; }
+
+.btn-comentar {
+  font-family: var(--body);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: #000000;
+  border: 1px solid #000000;
+  padding: 0.45rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-comentar:hover { background: var(--text2); border-color: var(--text2); }
+.btn-comentar:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.comment-empty {
+  font-family: var(--body);
+  font-size: 0.7rem;
+  color: var(--text2);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.8rem 0;
+}
+
+/* ── EMPTY / LOADING ── */
+.empty-state { padding: 4rem 0; text-align: center; }
+.empty-state-label {
+  font-family: var(--body);
+  font-size: 0.75rem;
+  color: var(--text2);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.empty-state-title {
+  font-family: var(--display);
+  font-size: 3.5rem;
+  color: var(--text2);
+  margin: 1rem 0;
+}
+
+.loading {
+  font-family: var(--body);
+  font-size: 0.75rem;
+  color: var(--text2);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 3rem 0;
+  text-align: center;
+}
+
+/* ── MODAL ── */
+.modal-bg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(128, 0, 0, 0.9);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-bg.open { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-top: 2px solid var(--text);
+  padding: 2rem;
+  max-width: 380px;
+  width: 100%;
+  position: relative;
+}
+
+.modal h2 {
+  font-family: var(--display);
+  font-size: 2.2rem;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  font-family: var(--body);
+}
+
+.modal-close:hover { color: var(--text2); }
+
+.modal input {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid var(--border2);
+  color: #000000;
+  font-family: var(--body);
+  font-size: 1rem;
+  padding: 0.7rem;
+  outline: none;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s;
+}
+
+.modal input:focus { border-color: var(--text); }
+
+.btn-login {
+  width: 100%;
+  background: #000000;
+  border: none;
+  color: #ffffff;
+  font-family: var(--body);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.7rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-login:hover { background: var(--text2); }
+
+/* ── FOOTER ── */
+footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
+
+.footer-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-id {
+  font-family: var(--body);
+  font-size: 0.7rem;
+  color: var(--text2);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 0.85em;
+  background: var(--text);
+  vertical-align: middle;
+  margin-left: 2px;
+  animation: blink 1.1s step-end infinite;
+}
+
+@media (max-width: 640px) {
+  .header-inner { grid-template-columns: 1fr; gap: 1rem; }
+  .header-right { text-align: left; }
+  main { padding: 2rem 1.2rem 4rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- INICIO -->
+<div id="page-inicio">
+  <div class="inicio-title">Blog<br><span class="line2">de Sasha</span></div>
+  <div class="inicio-sep"></div>
+  <button class="btn-entrar" id="btn-entrar">ENTRAR</button>
+</div>
+
+<!-- BLOG -->
+<div id="page-blog">
+
+  <header>
+    <div class="header-bg"></div>
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="header-label">Bienvenidos a mi rincón</div>
+        <div class="header-title">Blog de Sasha</div>
+        <div class="header-sub">Sasha S.</div>
+      </div>
+      <div class="header-right">
+        <div class="header-stat">
+          <strong id="post-count">—</strong>
+          ENTRADAS
+        </div>
+        <div class="header-stat" style="margin-top:0.8rem;">
+          <strong id="vistas-count">—</strong>
+          VISTAS
+        </div>
+        <div class="header-stat" style="margin-top:0.8rem;">
+          <strong id="reloj">00:00</strong>
+          HORA LOCAL
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-strip">
+    <div class="nav-strip-inner">
+      <div class="nav-id">BLOG_DE_SASHA.LOG<span class="cursor"></span></div>
+      <button class="btn-admin" id="btn-admin">ACCESO ADMIN</button>
+    </div>
+  </div>
+
+  <main>
+    <div class="admin-panel" id="admin-panel">
+      <div class="admin-panel-title" id="panel-mode-label">// nueva entrada</div>
+      <div class="field-group">
+        <label>Título</label>
+        <input type="text" id="post-titulo" placeholder="Título de la entrada…" maxlength="150">
+      </div>
+      <div class="field-group">
+        <label>Contenido</label>
+        <textarea id="post-contenido" placeholder="Escribí el contenido…"></textarea>
+      </div>
+      <div class="panel-actions">
+        <button class="btn-publish" id="btn-guardar">PUBLICAR</button>
+        <button class="btn-cancel" id="btn-cancelar">CANCELAR</button>
+      </div>
+    </div>
+
+    <div class="posts-header">
+      <div class="posts-header-title">Registro</div>
+      <div class="posts-count" id="posts-count-label"></div>
+    </div>
+    <div class="posts-list" id="posts-container">
+      <div class="loading">Cargando registros…</div>
+    </div>
+
+    <!-- ── FORMULARIO DE CONTACTO ── -->
+    <div class="formulario-section" style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+      <h2 style="font-family: var(--display); font-size: 2.2rem; color: var(--text); text-align: center; margin-bottom: 1.5rem;">Escribime</h2>
+      <div style="background: var(--surface); border: 1px solid var(--border2); padding: 1rem; border-radius: 4px;">
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScI4S0He_oly5Lx9QOKXuqkT-kWKrieGcF1-U9wbKFOT3io_g/viewform?embedded=true" width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0" style="background: white; border-radius: 4px;">Cargando…</iframe>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-id">Blog de Sasha · Sasha S.</div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- Modal login -->
+<div class="modal-bg" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" id="cerrar-login">✕</button>
+    <h2>Acceso</h2>
+    <input type="password" id="admin-pwd" placeholder="contraseña…">
+    <button class="btn-login" id="btn-ingresar">INGRESAR</button>
+  </div>
+</div>
+
+<script>
+function tick() {
+  const d = new Date();
+  const el = document.getElementById('reloj');
+  if (el) el.textContent = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+setInterval(tick, 1000);
+tick();
+
+document.getElementById('btn-entrar').addEventListener('click', () => {
+  document.getElementById('page-inicio').style.display = 'none';
+  document.getElementById('page-blog').style.display = 'block';
+});
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, doc, updateDoc, deleteDoc,
+  getDoc, setDoc, increment, onSnapshot, query, orderBy, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCOdpTR_Y-9eQoCJBlZ-OMybckIPqdstQo",
+  authDomain: "aao-ecds-1.firebaseapp.com",
+  projectId: "aao-ecds-1",
+  storageBucket: "aao-ecds-1.firebasestorage.app",
+  messagingSenderId: "186213040999",
+  appId: "1:186213040999:web:9e8c9fd8e7ac7e3dc065c2"
+};
+
+const app = initializeApp(firebaseConfig, 'fosa-app');
+const db = getFirestore(app);
+
+const ADMIN_PASSWORD = "sashasangre123";
+let isAdmin = false;
+let editingId = null;
+let allPosts = [];
+
+// ── CONTADOR DE VISTAS ──
+const vistasRef = doc(db, 'fosa_stats', 'vistas');
+
+async function contarVisita() {
+  try {
+    const snap = await getDoc(vistasRef);
+    if (!snap.exists()) {
+      await setDoc(vistasRef, { count: 1 });
+    } else {
+      await updateDoc(vistasRef, { count: increment(1) });
+    }
+    onSnapshot(vistasRef, (d) => {
+      const el = document.getElementById('vistas-count');
+      if (el && d.exists()) el.textContent = d.data().count;
+    });
+  } catch(e) { console.error(e); }
+}
+contarVisita();
+
+// ── HELPERS ──
+function esc(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function formatFecha(ts) {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('es', { day:'2-digit', month:'short', year:'numeric' })
+    + ' · ' + d.toLocaleTimeString('es', { hour:'2-digit', minute:'2-digit' });
+}
+
+// ── COMENTARIOS ──
+function renderComments(postId, comments) {
+  const list = document.getElementById(`clist-${postId}`);
+  const toggle = document.getElementById(`ctoggle-${postId}`);
+  if (!list) return;
+
+  const count = comments.length;
+  if (toggle) toggle.innerHTML = `COMENTARIOS <span class="count-badge">(${count})</span>`;
+
+  if (count === 0) {
+    list.innerHTML = `<div class="comment-empty">Sin comentarios aún.</div>`;
+    return;
+  }
+
+  list.innerHTML = '';
+  comments.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'comment-item';
+    div.innerHTML = `<div class="comment-autor">${esc(c.autor)}<span class="comment-fecha">${esc(formatFecha(c.fecha))}</span></div><div class="comment-texto">${esc(c.texto)}</div>`;
+    list.appendChild(div);
+  });
+}
+
+async function enviarComentario(postId) {
+  const autorEl = document.getElementById(`caut-${postId}`);
+  const textoEl = document.getElementById(`ctxt-${postId}`);
+  const btnEl   = document.getElementById(`cbtn-${postId}`);
+  const autor = autorEl.value.trim();
+  const texto = textoEl.value.trim();
+  if (!autor || !texto) return;
+
+  btnEl.disabled = true; btnEl.textContent = 'ENVIANDO…';
+  try {
+    const postRef = doc(db, 'fosa_posts', postId);
+    const snap = await getDoc(postRef);
+    if (!snap.exists()) return;
+    const existing = snap.data().comentarios || [];
+    await updateDoc(postRef, {
+      comentarios: [...existing, { autor, texto, fecha: new Date().toISOString() }]
+    });
+    autorEl.value = ''; textoEl.value = '';
+  } catch(e) { console.error(e); alert('Error al enviar.'); }
+  btnEl.disabled = false; btnEl.textContent = 'COMENTAR';
+}
+
+window.toggleComments = function(postId) {
+  const body = document.getElementById(`cbody-${postId}`);
+  if (body) body.classList.toggle('open');
+};
+
+window.enviarComentario = enviarComentario;
+
+// ── RENDER POSTS ──
+function renderPosts(posts) {
+  const cont = document.getElementById('posts-container');
+  const countEl = document.getElementById('posts-count-label');
+  const headerCount = document.getElementById('post-count');
+  if (!cont) return;
+
+  if (headerCount) headerCount.textContent = posts.length;
+  if (countEl) countEl.textContent = posts.length + (posts.length === 1 ? ' entrada' : ' entradas');
+
+  if (posts.length === 0) {
+    cont.innerHTML = `<div class="empty-state"><div class="empty-state-label">Sin registros</div><div class="empty-state-title">x.x</div></div>`;
+    return;
+  }
+
+  cont.innerHTML = '';
+  posts.forEach((post, i) => {
+    const num = String(posts.length - i).padStart(3, '0');
+    const isLong = post.contenido.length > 400;
+    const preview = isLong ? post.contenido.slice(0, 400) + '…' : post.contenido;
+    const comments = post.comentarios || [];
+
+    const card = document.createElement('article');
+    card.className = 'post-card';
+    card.style.animationDelay = (i * 0.06) + 's';
+
+    let adminHTML = '';
+    if (isAdmin) {
+      adminHTML = `<div class="post-admin-actions">
+        <button class="btn-edit" onclick="window.startEdit('${post.id}')">EDITAR</button>
+        <button class="btn-delete" onclick="window.deletePost('${post.id}')">ELIMINAR</button>
+      </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="post-number">#${num} · ${esc(formatFecha(post.fecha))}</div>
+      <h2 class="post-title">${esc(post.titulo)}</h2>
+      <div class="post-meta"><span>Sasha S.</span><span>Blog de Sasha</span></div>
+      <div class="post-body-preview ${isLong ? 'collapsed' : ''}" id="preview-${post.id}">
+        <div class="post-body" id="body-${post.id}">${esc(preview)}</div>
+      </div>
+      ${isLong ? `<button class="post-read-more" id="more-${post.id}" style="display:block" onclick="window.togglePost('${post.id}', ${JSON.stringify(post.contenido)})">VER MÁS →</button>` : ''}
+      ${adminHTML}
+      <div class="comments-section">
+        <button class="comments-toggle" id="ctoggle-${post.id}" onclick="window.toggleComments('${post.id}')">
+          COMENTARIOS <span class="count-badge">(${comments.length})</span>
+        </button>
+        <div class="comments-body" id="cbody-${post.id}">
+          <div class="comment-list" id="clist-${post.id}"></div>
+          <div class="comment-form">
+            <div class="comment-form-title">// dejar un comentario</div>
+            <input type="text" id="caut-${post.id}" placeholder="Nombre o seudónimo…" maxlength="60">
+            <textarea id="ctxt-${post.id}" placeholder="Escribí tu comentario…" maxlength="1000"></textarea>
+            <button class="btn-comentar" id="cbtn-${post.id}" onclick="window.enviarComentario('${post.id}')">COMENTAR</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    cont.appendChild(card);
+    renderComments(post.id, comments);
+  });
+}
+
+// ── LISTENER PRINCIPAL ──
+const q = query(collection(db, 'fosa_posts'), orderBy('fecha', 'desc'));
+onSnapshot(q, (snap) => {
+  allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderPosts(allPosts);
+}, err => {
+  console.error(err);
+  const cont = document.getElementById('posts-container');
+  if (cont) cont.innerHTML = '<div class="loading">Error al cargar.</div>';
+});
+
+// ── TOGGLE EXPAND ──
+window.togglePost = function(id, fullText) {
+  const preview = document.getElementById(`preview-${id}`);
+  const body = document.getElementById(`body-${id}`);
+  const btn = document.getElementById(`more-${id}`);
+  if (!preview) return;
+  if (preview.classList.contains('collapsed')) {
+    preview.classList.remove('collapsed');
+    body.textContent = fullText;
+    btn.textContent = 'VER MENOS ↑';
+  } else {
+    preview.classList.add('collapsed');
+    body.textContent = fullText.slice(0, 400) + '…';
+    btn.textContent = 'VER MÁS →';
+  }
+};
+
+// ── ADMIN LOGIN ──
+document.getElementById('btn-admin').addEventListener('click', () => {
+  if (isAdmin) {
+    document.getElementById('admin-panel').classList.toggle('visible');
+    resetForm();
+  } else {
+    document.getElementById('modal-login').classList.add('open');
+  }
+});
+
+document.getElementById('cerrar-login').addEventListener('click', () =>
+  document.getElementById('modal-login').classList.remove('open'));
+
+document.getElementById('modal-login').addEventListener('click', e => {
+  if (e.target === e.currentTarget) document.getElementById('modal-login').classList.remove('open');
+});
+
+document.getElementById('btn-ingresar').addEventListener('click', () => {
+  const pwd = document.getElementById('admin-pwd').value;
+  if (pwd === ADMIN_PASSWORD) {
+    isAdmin = true;
+    document.getElementById('modal-login').classList.remove('open');
+    document.getElementById('admin-pwd').value = '';
+    document.getElementById('btn-admin').textContent = 'NUEVA ENTRADA';
+    document.getElementById('admin-panel').classList.add('visible');
+    renderPosts(allPosts);
+  } else {
+    const input = document.getElementById('admin-pwd');
+    input.style.borderColor = '#999';
+    setTimeout(() => { input.style.borderColor = ''; }, 800);
+  }
+});
+
+document.getElementById('admin-pwd').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('btn-ingresar').click();
+});
+
+// ── FORM ──
+function resetForm() {
+  editingId = null;
+  document.getElementById('post-titulo').value = '';
+  document.getElementById('post-contenido').value = '';
+  document.getElementById('panel-mode-label').textContent = '// nueva entrada';
+  document.getElementById('btn-guardar').textContent = 'PUBLICAR';
+}
+
+document.getElementById('btn-cancelar').addEventListener('click', () => {
+  document.getElementById('admin-panel').classList.remove('visible');
+  resetForm();
+});
+
+document.getElementById('btn-guardar').addEventListener('click', async () => {
+  const titulo = document.getElementById('post-titulo').value.trim();
+  const contenido = document.getElementById('post-contenido').value.trim();
+  if (!titulo || !contenido) return;
+  const btn = document.getElementById('btn-guardar');
+  btn.disabled = true; btn.textContent = 'GUARDANDO…';
+  try {
+    if (editingId) {
+      await updateDoc(doc(db, 'fosa_posts', editingId), { titulo, contenido, fecha_editado: serverTimestamp() });
+    } else {
+      await addDoc(collection(db, 'fosa_posts'), { titulo, contenido, comentarios: [], fecha: serverTimestamp() });
+    }
+    document.getElementById('admin-panel').classList.remove('visible');
+    resetForm();
+  } catch(err) { console.error(err); alert('Error al guardar.'); }
+  btn.disabled = false; btn.textContent = 'PUBLICAR';
+});
+
+window.startEdit = function(id) {
+  const post = allPosts.find(p => p.id === id);
+  if (!post) return;
+  editingId = id;
+  document.getElementById('post-titulo').value = post.titulo;
+  document.getElementById('post-contenido').value = post.contenido;
+  document.getElementById('panel-mode-label').textContent = '// editando entrada';
+  document.getElementById('btn-guardar').textContent = 'GUARDAR CAMBIOS';
+  document.getElementById('admin-panel').classList.add('visible');
+  document.getElementById('admin-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+window.deletePost = async function(id) {
+  if (!confirm('¿Eliminar esta entrada?')) return;
+  try { await deleteDoc(doc(db, 'fosa_posts', id)); }
+  catch(err) { console.error(err); }
+};
+</script>
+
+</body>
+</html>

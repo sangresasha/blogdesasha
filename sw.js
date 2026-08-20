@@ -1,36 +1,23 @@
-importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCOdpTR_Y-9eQoCJBlZ-OMybckIPqdstQo",
-  authDomain: "aao-ecds-1.firebaseapp.com",
-  projectId: "aao-ecds-1",
-  storageBucket: "aao-ecds-1.firebasestorage.app",
-  messagingSenderId: "186213040999",
-  appId: "1:186213040999:web:9e8c9fd8e7ac7e3dc065c2"
-};
-
-firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
-
-messaging.onBackgroundMessage((payload) => {
-  const notificationTitle = payload.notification.title;
+const q = query(collection(db, 'fosa_posts'), orderBy('fecha', 'desc'));
+onSnapshot(q, (snap) => {
+  allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   
-  // DETECTAMOS SI ES MÓVIL O PC
-  const userAgent = self.navigator.userAgent.toLowerCase();
-  const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/.test(userAgent);
-
-  // Elegimos el sonido según el dispositivo
-  let soundToPlay = '/blogdesasha/resident-evil-2-inventario.mp3'; // Tu MP3 personalizado
-  if (isMobile) {
-    soundToPlay = 'default'; // Sonido común del sistema en móviles
+  const cont = document.getElementById('posts-container');
+  
+  // Si es la primera vez que carga (o está vacío), dibujamos todo
+  if (cont.innerHTML.includes('loading') || cont.innerHTML === '') {
+    renderPosts(allPosts);
+  } else {
+    // Si ya hay tarjetas cargadas, SOLO actualizamos el número de likes para evitar parpadeos
+    allPosts.forEach(post => {
+      const countEl = document.getElementById('like-count-' + post.id);
+      if (countEl) {
+        countEl.textContent = post.likes || 0;
+      }
+    });
   }
-
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: '/blogdesasha/icon-512.png',
-    sound: soundToPlay,
-    tag: 'notificacion-sasha'
-  };
-  self.registration.showNotification(notificationTitle, notificationOptions);
+}, err => {
+  console.error(err);
+  const cont = document.getElementById('posts-container');
+  if (cont) cont.innerHTML = '<div class="loading">Error al cargar.</div>';
 });

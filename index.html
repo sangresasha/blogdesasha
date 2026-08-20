@@ -55,7 +55,7 @@ button, a, .btn-admin, .btn-entrar, .btn-academia, .btn-publish, .btn-cancel, .b
     cursor: pointer !important;
 }
 
-#page-blog::before {
+#page-blog::before, #page-foro::before {
   content: '';
   position: fixed;
   inset: 0;
@@ -67,7 +67,7 @@ button, a, .btn-admin, .btn-entrar, .btn-academia, .btn-publish, .btn-cancel, .b
   pointer-events: none;
 }
 
-#page-blog > * { position: relative; z-index: 1; }
+#page-blog > *, #page-foro > * { position: relative; z-index: 1; }
 
 body::after {
   content: '';
@@ -106,7 +106,7 @@ body::after {
 }
 .btn-entrar:hover { background: rgba(0,0,0,0.1); border-color: var(--text); }
 
-#page-blog { display: none; }
+#page-blog, #page-foro { display: none; }
 
 header { border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
 .header-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(0,0,0,0.1) 0%, transparent 60%); }
@@ -125,11 +125,18 @@ header { border-bottom: 1px solid var(--border); position: relative; overflow: h
 .nav-strip { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; position: sticky; top: 0; z-index: 100; }
 .nav-strip-inner { max-width: 960px; width: 100%; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
 .nav-id { font-family: var(--body); font-size: 0.7rem; color: var(--text); letter-spacing: 0.15em; padding: 0.8rem 0; text-transform: uppercase; }
-.btn-admin { font-family: var(--body); font-size: 0.7rem; letter-spacing: 0.12em; color: var(--text); background: none; border: 1px solid var(--border2); padding: 0.35rem 0.9rem; transition: all 0.2s; text-transform: uppercase; }
-.btn-admin:hover { background: rgba(0,0,0,0.1); border-color: var(--text); }
+.nav-strip-inner .buttons-group { display: flex; gap: 0.5rem; }
+
+.btn-admin, .btn-foro {
+  font-family: var(--body); font-size: 0.7rem; letter-spacing: 0.12em;
+  color: var(--text); background: none; border: 1px solid var(--border2);
+  padding: 0.35rem 0.9rem; transition: all 0.2s; text-transform: uppercase;
+}
+.btn-admin:hover, .btn-foro:hover { background: rgba(0,0,0,0.1); border-color: var(--text); }
 
 main { max-width: 960px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 
+/* ── ADMIN PANEL (BLOG) ── */
 .admin-panel { display: none; background: var(--surface); border: 1px solid var(--border2); border-left: 2px solid var(--text); padding: 1.5rem; margin-bottom: 2.5rem; }
 .admin-panel.visible { display: block; }
 .admin-panel-title { font-family: var(--body); font-size: 0.75rem; color: var(--text); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1.2rem; }
@@ -139,7 +146,6 @@ main { max-width: 960px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 .field-group input:focus, .field-group textarea:focus { border-color: var(--text); }
 .field-group input::placeholder, .field-group textarea::placeholder { color: var(--text3); }
 .field-group textarea { min-height: 180px; }
-
 .panel-actions { display: flex; gap: 0.8rem; margin-top: 1.2rem; flex-wrap: wrap; }
 .btn-publish { font-family: var(--body); font-size: 0.75rem; letter-spacing: 0.15em; color: #ffffff; background: #000000; border: 1px solid #000000; padding: 0.55rem 1.6rem; transition: all 0.2s; text-transform: uppercase; }
 .btn-publish:hover { background: var(--text2); border-color: var(--text2); }
@@ -147,6 +153,10 @@ main { max-width: 960px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 .btn-cancel { font-family: var(--body); font-size: 0.75rem; letter-spacing: 0.15em; color: var(--text); background: none; border: 1px solid var(--border2); padding: 0.55rem 1.2rem; transition: all 0.2s; text-transform: uppercase; }
 .btn-cancel:hover { border-color: var(--text); background: rgba(0,0,0,0.05); }
 
+.image-upload-group { display: flex; gap: 1rem; align-items: center; background: rgba(0,0,0,0.05); padding: 0.8rem; border: 1px dashed var(--border); margin-bottom: 1rem; }
+.image-upload-group input[type="file"] { font-size: 0.75rem; font-family: var(--body); }
+
+/* ── BLOG POSTS ── */
 .posts-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
 .posts-header-title { font-family: var(--body); font-size: 0.75rem; color: var(--text2); letter-spacing: 0.2em; text-transform: uppercase; }
 .posts-count { font-family: var(--body); font-size: 0.7rem; color: var(--text2); letter-spacing: 0.1em; }
@@ -157,16 +167,12 @@ main { max-width: 960px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 .post-number::after { content: ''; flex: 1; height: 1px; background: var(--border); max-width: 50px; }
 .post-title { font-family: var(--display); font-size: clamp(1.8rem, 4vw, 2.8rem); color: var(--text); line-height: 1; margin-bottom: 0.6rem; }
 .post-meta { font-family: var(--body); font-size: 0.7rem; color: var(--text2); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.2rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
-
 .post-body { font-size: 1.05rem; color: var(--text); line-height: 1.8; white-space: pre-wrap; word-break: break-word; overflow: hidden; }
 .post-body img { max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: 4px; margin: 1rem 0; }
-
 .post-body-preview.collapsed .post-body { display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
 .post-body-preview.collapsed::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 60px; background: linear-gradient(to bottom, transparent, var(--bg)); }
-
 .post-read-more { font-family: var(--body); font-size: 0.75rem; color: var(--text); letter-spacing: 0.15em; text-transform: uppercase; background: none; border: none; padding: 0.5rem 0; margin-top: 0.5rem; transition: color 0.2s; display: none; }
 .post-read-more:hover { color: var(--text2); }
-
 .post-admin-actions { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
 .btn-edit, .btn-delete { font-family: var(--body); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; background: none; border: 1px solid var(--border2); padding: 0.3rem 0.8rem; transition: all 0.2s; color: var(--text); }
 .btn-edit:hover { border-color: var(--text); background: rgba(0,0,0,0.05); }
@@ -194,6 +200,23 @@ main { max-width: 960px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 .btn-comentar:hover { background: var(--text2); border-color: var(--text2); }
 .btn-comentar:disabled { opacity: 0.4; cursor: not-allowed; }
 .comment-empty { font-family: var(--body); font-size: 0.7rem; color: var(--text2); letter-spacing: 0.12em; text-transform: uppercase; padding: 0.8rem 0; }
+
+/* ── FORO DE LA COMUNIDAD ── */
+.foro-header { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; }
+.foro-header-title { font-family: var(--body); font-size: 0.75rem; color: var(--text2); letter-spacing: 0.2em; text-transform: uppercase; }
+.foro-nuevo-tema-form { background: var(--surface); border: 1px solid var(--border2); padding: 1.5rem; border-radius: 2px; }
+.foro-nuevo-tema-form label { display: block; font-family: var(--body); font-size: 0.7rem; color: var(--text); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.foro-nuevo-tema-form input, .foro-nuevo-tema-form textarea { width: 100%; background: #ffffff; border: 1px solid var(--border2); color: #000000; font-family: var(--body); padding: 0.5rem 0.8rem; outline: none; margin-bottom: 0.6rem; font-size: 0.95rem; resize: vertical; }
+.foro-nuevo-tema-form input:focus, .foro-nuevo-tema-form textarea:focus { border-color: var(--text); }
+.foro-nuevo-tema-form textarea { min-height: 100px; }
+.btn-foro-crear { font-family: var(--body); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: #ffffff; background: #000000; border: 1px solid #000000; padding: 0.45rem 1.2rem; transition: all 0.2s; }
+.btn-foro-crear:hover { background: var(--text2); border-color: var(--text2); }
+.btn-foro-crear:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.foro-tema-card { background: var(--surface); border: 1px solid var(--border2); padding: 1.5rem; margin-bottom: 1.5rem; border-radius: 2px; }
+.foro-tema-titulo { font-family: var(--display); font-size: clamp(1.5rem, 3vw, 2.2rem); color: var(--text); line-height: 1; margin-bottom: 0.3rem; }
+.foro-tema-meta { font-family: var(--body); font-size: 0.65rem; color: var(--text2); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; display: flex; gap: 1rem; }
+.foro-tema-cuerpo { font-size: 0.95rem; color: var(--text); line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
 
 .empty-state { padding: 4rem 0; text-align: center; }
 .empty-state-label { font-family: var(--body); font-size: 0.75rem; color: var(--text2); letter-spacing: 0.2em; text-transform: uppercase; }
@@ -243,7 +266,10 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
   <div class="nav-strip">
     <div class="nav-strip-inner">
       <div class="nav-id">BLOG_DE_SASHA.LOG<span class="cursor"></span></div>
-      <button class="btn-admin" id="btn-admin">ACCESO ADMIN</button>
+      <div class="buttons-group">
+        <button class="btn-foro" id="btn-ir-foro">FORO</button>
+        <button class="btn-admin" id="btn-admin">ACCESO ADMIN</button>
+      </div>
     </div>
   </div>
 
@@ -254,14 +280,11 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
         <label>Título</label>
         <input type="text" id="post-titulo" placeholder="Título de la entrada…" maxlength="150">
       </div>
-
-      <!-- Subir imagen con límite BAJADO a 600 KB (Para que no se rompa en Firestore) -->
-      <div class="image-upload-group" style="display: flex; gap: 1rem; align-items: center; background: rgba(0,0,0,0.05); padding: 0.8rem; border: 1px dashed var(--border); margin-bottom: 1rem;">
-        <input type="file" id="img-input" accept="image/*" style="font-size: 0.75rem; font-family: var(--body);">
+      <div class="image-upload-group">
+        <input type="file" id="img-input" accept="image/*">
         <button class="btn-publish" id="btn-insert-img" style="padding: 0.4rem 1rem; font-size: 0.7rem;">INSERTAR IMAGEN</button>
         <span id="img-status" style="font-size: 0.7rem; color: var(--text2);"></span>
       </div>
-
       <div class="field-group">
         <label>Contenido</label>
         <textarea id="post-contenido" placeholder="Escribí el contenido…"></textarea>
@@ -296,6 +319,66 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
         <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2286284862&color=%230e1208&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
         <div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/sangresasha" title="SANGRE SASHA" target="_blank" style="color: #cccccc; text-decoration: none;">SANGRE SASHA</a> · <a href="https://soundcloud.com/sangresasha/sets/pistas-similares-most-days-ft" title="Pistas similares: most days ft.capoxxo" target="_blank" style="color: #cccccc; text-decoration: none;">Pistas similares: most days ft.capoxxo</a></div>
       </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-id">Blog de Sasha · Sasha S.</div>
+    </div>
+  </footer>
+</div>
+
+<!-- ── PÁGINA DEL FORO ── -->
+<div id="page-foro">
+  <header>
+    <div class="header-bg"></div>
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="header-label">Comunidad</div>
+        <div class="header-title">El Foro</div>
+        <div class="header-sub">de Sasha S.</div>
+      </div>
+      <div class="header-right">
+        <div class="header-stat"><strong id="foro-post-count">—</strong>TEMAS</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="nav-strip">
+    <div class="nav-strip-inner">
+      <div class="nav-id">FORO_DE_SASHA.LOG<span class="cursor"></span></div>
+      <div class="buttons-group">
+        <button class="btn-admin" id="btn-ir-blog">VOLVER AL BLOG</button>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- FORMULARIO PARA CREAR UN TEMA EN EL FORO -->
+    <div class="foro-header">
+      <div class="foro-header-title">// crear un nuevo tema</div>
+      <div class="foro-nuevo-tema-form">
+        <label>Tu nombre</label>
+        <input type="text" id="foro-autor" placeholder="Anónimo…" maxlength="60">
+        
+        <label>Título del tema</label>
+        <input type="text" id="foro-titulo" placeholder="Escribí el título…" maxlength="150">
+        
+        <label>Mensaje</label>
+        <textarea id="foro-contenido" placeholder="Escribí tu mensaje…"></textarea>
+        
+        <button class="btn-foro-crear" id="btn-crear-tema">PUBLICAR TEMA</button>
+        <span id="foro-status" style="font-size: 0.7rem; color: var(--text2); margin-left: 1rem;"></span>
+      </div>
+    </div>
+
+    <div class="posts-header">
+      <div class="posts-header-title">Temas del foro</div>
+      <div class="posts-count" id="foro-posts-count-label"></div>
+    </div>
+    <div class="posts-list" id="foro-posts-container">
+      <div class="loading">Cargando temas…</div>
     </div>
   </main>
 
@@ -343,7 +426,21 @@ const provider = new GoogleAuthProvider();
 let isAdmin = false;
 let editingId = null;
 let allPosts = [];
+let allForoPosts = [];
 
+// ── NAVEGACIÓN BLOG / FORO ──
+function goToBlog() {
+  document.getElementById('page-blog').style.display = 'block';
+  document.getElementById('page-foro').style.display = 'none';
+}
+function goToForo() {
+  document.getElementById('page-blog').style.display = 'none';
+  document.getElementById('page-foro').style.display = 'block';
+}
+document.getElementById('btn-ir-foro').addEventListener('click', goToForo);
+document.getElementById('btn-ir-blog').addEventListener('click', goToBlog);
+
+// ── ESTADO DE AUTENTICACIÓN ──
 onAuthStateChanged(auth, (user) => {
   if (user) {
     isAdmin = true;
@@ -390,6 +487,10 @@ function formatFecha(ts) {
   const d = ts.toDate ? ts.toDate() : new Date(ts);
   return d.toLocaleDateString('es', { day:'2-digit', month:'short', year:'numeric' }) + ' · ' + d.toLocaleTimeString('es', { hour:'2-digit', minute:'2-digit' });
 }
+
+// ════════════════════════════════════════════
+// ── LÓGICA DEL BLOG DE SASHA ──
+// ════════════════════════════════════════════
 
 function renderComments(postId, comments) {
   const list = document.getElementById(`clist-${postId}`);
@@ -439,7 +540,6 @@ function renderPosts(posts) {
   cont.innerHTML = '';
   posts.forEach((post, i) => {
     const num = String(posts.length - i).padStart(3, '0');
-    // Si el contenido empieza con una imagen, NO lo colapsamos para que se vea completo
     const startsWithImage = post.contenido.trim().startsWith('<img');
     const isLong = !startsWithImage && post.contenido.length > 400; 
     const comments = post.comentarios || [];
@@ -448,7 +548,6 @@ function renderPosts(posts) {
     card.style.animationDelay = (i * 0.06) + 's';
     let adminHTML = '';
     if (isAdmin) { adminHTML = `<div class="post-admin-actions"><button class="btn-edit" onclick="window.startEdit('${post.id}')">EDITAR</button><button class="btn-delete" onclick="window.deletePost('${post.id}')">ELIMINAR</button></div>`; }
-    
     card.innerHTML = `
       <div class="post-number">#${num} · ${esc(formatFecha(post.fecha))}</div>
       <h2 class="post-title">${esc(post.titulo)}</h2>
@@ -499,7 +598,6 @@ function resetForm() {
   document.getElementById('btn-guardar').textContent = 'PUBLICAR';
 }
 document.getElementById('btn-cancelar').addEventListener('click', () => { document.getElementById('admin-panel').classList.remove('visible'); resetForm(); });
-
 document.getElementById('btn-guardar').addEventListener('click', async () => {
   const titulo = document.getElementById('post-titulo').value.trim();
   const contenido = document.getElementById('post-contenido').value.trim();
@@ -526,32 +624,149 @@ window.startEdit = function(id) {
   document.getElementById('admin-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 window.deletePost = async function(id) { if (!confirm('¿Eliminar esta entrada?')) return; try { await deleteDoc(doc(db, 'fosa_posts', id)); } catch(err) { console.error(err); } };
-
-// ── SUBIR IMAGEN CON LÍMITE DE 600 KB ──
 document.getElementById('btn-insert-img').addEventListener('click', () => {
   const input = document.getElementById('img-input');
   const status = document.getElementById('img-status');
   const file = input.files[0];
   if (!file) { status.textContent = 'Seleccioná una imagen primero.'; return; }
-  // BAJAMOS EL LÍMITE A 600 KB PARA QUE NO SE CORTE EN FIRESTORE
   if (file.size > 600 * 1024) { status.textContent = '❌ Imagen muy pesada (máximo 600 KB).'; return; }
   status.textContent = '⏳ Convirtiendo...';
   const reader = new FileReader();
   reader.onload = function(e) {
     const base64String = e.target.result;
     const textarea = document.getElementById('post-contenido');
-    const startPos = textarea.selectionStart;
-    const endPos = textarea.selectionEnd;
+    const startPos = textarea.selectionStart; const endPos = textarea.selectionEnd;
     const textBefore = textarea.value.substring(0, startPos);
     const textAfter = textarea.value.substring(endPos, textarea.value.length);
     const imgTag = `\n<img src="${base64String}" alt="Imagen subida" style="max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: 4px; margin: 1rem 0;">\n`;
     textarea.value = textBefore + imgTag + textAfter;
-    status.textContent = '✅ Imagen insertada!';
-    input.value = '';
+    status.textContent = '✅ Imagen insertada!'; input.value = '';
     setTimeout(() => status.textContent = '', 4000);
   };
   reader.readAsDataURL(file);
 });
+
+// ════════════════════════════════════════════
+// ── LÓGICA DEL FORO DE LA COMUNIDAD ──
+// ════════════════════════════════════════════
+
+// 1. CREAR UN NUEVO TEMA EN EL FORO
+document.getElementById('btn-crear-tema').addEventListener('click', async () => {
+  const autorEl = document.getElementById('foro-autor');
+  const tituloEl = document.getElementById('foro-titulo');
+  const contenidoEl = document.getElementById('foro-contenido');
+  const statusEl = document.getElementById('foro-status');
+
+  const autor = autorEl.value.trim() || "Anónimo";
+  const titulo = tituloEl.value.trim();
+  const contenido = contenidoEl.value.trim();
+  if (!titulo || !contenido) { statusEl.textContent = '❌ Faltan título o mensaje.'; return; }
+
+  const btn = document.getElementById('btn-crear-tema');
+  btn.disabled = true; btn.textContent = 'PUBLICANDO…';
+  try {
+    await addDoc(collection(db, 'foro_posts'), { autor, titulo, contenido, fecha: serverTimestamp() });
+    statusEl.textContent = '✅ Tema publicado!';
+    autorEl.value = ''; tituloEl.value = ''; contenidoEl.value = '';
+    setTimeout(() => statusEl.textContent = '', 4000);
+  } catch(err) { console.error(err); statusEl.textContent = '❌ Error al publicar.'; }
+  btn.disabled = false; btn.textContent = 'PUBLICAR TEMA';
+});
+
+// 2. RENDERIZAR TEMAS DEL FORO
+function renderForoPosts(posts) {
+  const cont = document.getElementById('foro-posts-container');
+  const countEl = document.getElementById('foro-posts-count-label');
+  const headerCount = document.getElementById('foro-post-count');
+  if (!cont) return;
+  if (headerCount) headerCount.textContent = posts.length;
+  if (countEl) countEl.textContent = posts.length + (posts.length === 1 ? ' tema' : ' temas');
+  if (posts.length === 0) { cont.innerHTML = `<div class="empty-state"><div class="empty-state-label">Sin temas aún</div><div class="empty-state-title">x.x</div></div>`; return; }
+  cont.innerHTML = '';
+  posts.forEach((post, i) => {
+    const num = String(posts.length - i).padStart(3, '0');
+    const card = document.createElement('article');
+    card.className = 'post-card';
+    card.style.animationDelay = (i * 0.06) + 's';
+
+    // HTML del Tema
+    card.innerHTML = `
+      <div class="post-number">#${num} · ${esc(formatFecha(post.fecha))}</div>
+      <h2 class="post-title" style="font-size: clamp(1.5rem, 3vw, 2.2rem);">${esc(post.titulo)}</h2>
+      <div class="post-meta"><span>${esc(post.autor)}</span><span>Foro de Sasha</span></div>
+      <div class="post-body" style="font-size: 0.95rem; margin-bottom: 1rem;">${esc(post.contenido)}</div>
+      
+      <div class="comments-section">
+        <button class="comments-toggle" id="ftoggle-${post.id}" onclick="toggleForoComments('${post.id}')">
+          COMENTARIOS <span class="count-badge">(0)</span>
+        </button>
+        <div class="comments-body" id="fbody-${post.id}">
+          <div class="comment-list" id="flist-${post.id}"></div>
+          <div class="comment-form">
+            <div class="comment-form-title">// dejar una respuesta</div>
+            <input type="text" id="faut-${post.id}" placeholder="Nombre o seudónimo…" maxlength="60">
+            <textarea id="ftxt-${post.id}" placeholder="Escribí tu respuesta…" maxlength="1000"></textarea>
+            <button class="btn-comentar" id="fbtn-${post.id}" onclick="enviarComentarioForo('${post.id}')">RESPONDER</button>
+          </div>
+        </div>
+      </div>
+    `;
+    cont.appendChild(card);
+    
+    // Escuchamos los comentarios de ESTE tema en tiempo real
+    const qComments = query(collection(db, 'foro_posts', post.id, 'comentarios'), orderBy('fecha', 'asc'));
+    onSnapshot(qComments, (snap) => {
+      const comments = snap.docs.map(d => d.data());
+      const toggle = document.getElementById(`ftoggle-${post.id}`);
+      if (toggle) toggle.innerHTML = `COMENTARIOS <span class="count-badge">(${comments.length})</span>`;
+      
+      const list = document.getElementById(`flist-${post.id}`);
+      if (!list) return;
+      if (comments.length === 0) { list.innerHTML = `<div class="comment-empty">Sin respuestas aún.</div>`; return; }
+      list.innerHTML = '';
+      comments.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'comment-item';
+        div.innerHTML = `<div class="comment-autor">${esc(c.autor)}<span class="comment-fecha">${esc(formatFecha(c.fecha))}</span></div><div class="comment-texto">${esc(c.texto)}</div>`;
+        list.appendChild(div);
+      });
+    });
+  });
+}
+
+// 3. FUNCIONES DE COMENTARIOS DEL FORO
+window.toggleForoComments = function(postId) {
+  const body = document.getElementById(`fbody-${postId}`);
+  if (body) body.classList.toggle('open');
+};
+
+window.enviarComentarioForo = async function(postId) {
+  const autorEl = document.getElementById(`faut-${postId}`);
+  const textoEl = document.getElementById(`ftxt-${postId}`);
+  const btnEl   = document.getElementById(`fbtn-${postId}`);
+  const autor = autorEl.value.trim() || "Anónimo";
+  const texto = textoEl.value.trim();
+  if (!texto) return;
+
+  btnEl.disabled = true; btnEl.textContent = 'ENVIANDO…';
+  try {
+    await addDoc(collection(db, 'foro_posts', postId, 'comentarios'), { autor, texto, fecha: new Date().toISOString() });
+    autorEl.value = ''; textoEl.value = '';
+  } catch(e) { console.error(e); alert('Error al enviar.'); }
+  btnEl.disabled = false; btnEl.textContent = 'RESPONDER';
+};
+
+// 4. ESCUCHAMOS LOS TEMAS DEL FORO
+const qForo = query(collection(db, 'foro_posts'), orderBy('fecha', 'desc'));
+onSnapshot(qForo, (snap) => {
+  allForoPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderForoPosts(allForoPosts);
+}, err => {
+  console.error(err);
+  const cont = document.getElementById('foro-posts-container');
+  if (cont) cont.innerHTML = '<div class="loading">Error al cargar el foro.</div>';
+});
+
 </script>
 </body>
 </html>

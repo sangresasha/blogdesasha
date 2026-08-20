@@ -42,24 +42,26 @@ body {
   overflow-x: hidden;
 }
 
-/* ── GIF SUPERPUESTO SOBRE FONDO ROJO ── */
+/* ── GIF SUPERPUESTO CON CAPA OSCURA ── */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: url('picmix.com_2174009.gif') center/cover no-repeat;
-  opacity: 0.4; /* Ajustá este valor (0.1 a 0.8) a tu gusto */
+  background: 
+    rgba(0, 0, 0, 0.7),  /* capa negra semitransparente para oscurecer */
+    url('picmix.com_2174009.gif') center/cover no-repeat;
+  opacity: 0.2; /* reducimos la opacidad global para que sea muy sutil */
   z-index: 0;
   pointer-events: none;
 }
 
-/* Asegura que todo el contenido quede por encima del GIF */
+/* Asegura que todo el contenido quede por encima */
 body > * {
   position: relative;
   z-index: 1;
 }
 
-/* ── EFECTO DE RUIDO (opcional, lo dejamos liviano) ── */
+/* ── EFECTO DE RUIDO (opcional, muy leve) ── */
 body::after {
   content: '';
   position: fixed;
@@ -560,7 +562,7 @@ main { max-width: 960px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 }
 
 .empty-state-title {
-  font-family: var(--display);
+  font-family: 'Comic Sans MS', 'Comic Sans', cursive; /* Comic Sans para "x.x" */
   font-size: 3.5rem;
   color: var(--text2);
   margin: 1rem 0;

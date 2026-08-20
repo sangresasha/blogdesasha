@@ -15,9 +15,22 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
+  
+  // DETECTAMOS SI ES MÓVIL O PC
+  const userAgent = self.navigator.userAgent.toLowerCase();
+  const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/.test(userAgent);
+
+  // Elegimos el sonido según el dispositivo
+  let soundToPlay = '/blogdesasha/resident-evil-2-inventario.mp3'; // Tu MP3 personalizado
+  if (isMobile) {
+    soundToPlay = 'default'; // Sonido común del sistema en móviles
+  }
+
   const notificationOptions = {
     body: payload.notification.body,
-    icon: '/blogdesasha/icon-512.png'
+    icon: '/blogdesasha/icon-512.png',
+    sound: soundToPlay,
+    tag: 'notificacion-sasha'
   };
   self.registration.showNotification(notificationTitle, notificationOptions);
 });

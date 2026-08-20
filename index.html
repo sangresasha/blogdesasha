@@ -587,84 +587,6 @@ main { max-width: 960px; margin: 0 auto; padding: 3rem 2rem 6rem; }
   text-align: center;
 }
 
-/* ── MODAL ── */
-.modal-bg {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(128, 0, 0, 0.9);
-  z-index: 500;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.modal-bg.open { display: flex; }
-
-.modal {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-top: 2px solid var(--text);
-  padding: 2rem;
-  max-width: 380px;
-  width: 100%;
-  position: relative;
-}
-
-.modal h2 {
-  font-family: var(--display);
-  font-size: 2.2rem;
-  color: var(--text);
-  margin-bottom: 1.5rem;
-}
-
-.modal-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  color: var(--text);
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: color 0.2s;
-  font-family: var(--body);
-}
-
-.modal-close:hover { color: var(--text2); }
-
-.modal input {
-  width: 100%;
-  background: #ffffff;
-  border: 1px solid var(--border2);
-  color: #000000;
-  font-family: var(--body);
-  font-size: 1rem;
-  padding: 0.7rem;
-  outline: none;
-  letter-spacing: 0.05em;
-  margin-bottom: 1rem;
-  transition: border-color 0.2s;
-}
-
-.modal input:focus { border-color: var(--text); }
-
-.btn-login {
-  width: 100%;
-  background: #000000;
-  border: none;
-  color: #ffffff;
-  font-family: var(--body);
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 0.7rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-login:hover { background: var(--text2); }
-
 /* ── FOOTER ── */
 footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
 
@@ -747,6 +669,7 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
   </div>
 
   <main>
+    <!-- PANEL DE ADMINISTRACIÓN (YA SIN EL MODAL DE CONTRASEÑA) -->
     <div class="admin-panel" id="admin-panel">
       <div class="admin-panel-title" id="panel-mode-label">// nueva entrada</div>
       <div class="field-group">
@@ -760,6 +683,8 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
       <div class="panel-actions">
         <button class="btn-publish" id="btn-guardar">PUBLICAR</button>
         <button class="btn-cancel" id="btn-cancelar">CANCELAR</button>
+        <!-- NUEVO: Botón para cerrar sesión de Google -->
+        <button class="btn-cancel" id="btn-logout" style="border-color: var(--border); color: var(--text2); margin-left: auto;">CERRAR SESIÓN</button>
       </div>
     </div>
 
@@ -798,16 +723,6 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
 
 </div>
 
-<!-- Modal login -->
-<div class="modal-bg" id="modal-login">
-  <div class="modal">
-    <button class="modal-close" id="cerrar-login">✕</button>
-    <h2>Acceso</h2>
-    <input type="password" id="admin-pwd" placeholder="contraseña…">
-    <button class="btn-login" id="btn-ingresar">INGRESAR</button>
-  </div>
-</div>
-
 <script>
 function tick() {
   const d = new Date();
@@ -829,6 +744,8 @@ import {
   getFirestore, collection, addDoc, doc, updateDoc, deleteDoc,
   getDoc, setDoc, increment, onSnapshot, query, orderBy, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+// ── IMPORTAMOS LA AUTENTICACIÓN DE GOOGLE ──
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCOdpTR_Y-9eQoCJBlZ-OMybckIPqdstQo",
@@ -841,11 +758,62 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig, 'fosa-app');
 const db = getFirestore(app);
+// ── INICIALIZAMOS AUTH ──
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-const ADMIN_PASSWORD = "sashasangre123";
+// Ya NO necesitamos la contraseña en texto plano
 let isAdmin = false;
 let editingId = null;
 let allPosts = [];
+
+// ── ESTADO DE AUTENTICACIÓN ──
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // Si está logueado con Google, activamos el modo admin
+    isAdmin = true;
+    document.getElementById('btn-admin').textContent = 'NUEVA ENTRADA';
+    // No abrimos el panel automáticamente, solo cuando haga clic en el botón (toggle manual)
+    renderPosts(allPosts);
+  } else {
+    // Si no está logueado, bloqueamos todo
+    isAdmin = false;
+    document.getElementById('btn-admin').textContent = 'ACCESO ADMIN';
+    document.getElementById('admin-panel').classList.remove('visible');
+    resetForm();
+  }
+});
+
+// ── BOTÓN DE ACCESO ADMIN (LOGIN CON GOOGLE / TOGGLE PANEL) ──
+document.getElementById('btn-admin').addEventListener('click', () => {
+  if (isAdmin) {
+    // Si ya es admin, alternamos la visibilidad del panel
+    document.getElementById('admin-panel').classList.toggle('visible');
+    if (document.getElementById('admin-panel').classList.contains('visible')) {
+       resetForm();
+    }
+  } else {
+    // Si no es admin, iniciamos sesión con Google
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log("Logueado como:", result.user.displayName);
+      })
+      .catch((error) => {
+        console.error("Error al iniciar sesión:", error);
+      });
+  }
+});
+
+// ── BOTÓN DE CERRAR SESIÓN ──
+document.getElementById('btn-logout').addEventListener('click', () => {
+  if (confirm('¿Cerrar sesión de Google?')) {
+    signOut(auth).then(() => {
+      document.getElementById('admin-panel').classList.remove('visible');
+    }).catch((error) => {
+      console.error('Error al cerrar sesión:', error);
+    });
+  }
+});
 
 // ── CONTADOR DE VISTAS ──
 const vistasRef = doc(db, 'fosa_stats', 'vistas');
@@ -905,9 +873,9 @@ async function enviarComentario(postId) {
   const autorEl = document.getElementById(`caut-${postId}`);
   const textoEl = document.getElementById(`ctxt-${postId}`);
   const btnEl   = document.getElementById(`cbtn-${postId}`);
-  const autor = autorEl.value.trim();
+  const autor = autorEl.value.trim() || "Anónimo";
   const texto = textoEl.value.trim();
-  if (!autor || !texto) return;
+  if (!texto) return;
 
   btnEl.disabled = true; btnEl.textContent = 'ENVIANDO…';
   try {
@@ -1021,43 +989,6 @@ window.togglePost = function(id, fullText) {
     btn.textContent = 'VER MÁS →';
   }
 };
-
-// ── ADMIN LOGIN ──
-document.getElementById('btn-admin').addEventListener('click', () => {
-  if (isAdmin) {
-    document.getElementById('admin-panel').classList.toggle('visible');
-    resetForm();
-  } else {
-    document.getElementById('modal-login').classList.add('open');
-  }
-});
-
-document.getElementById('cerrar-login').addEventListener('click', () =>
-  document.getElementById('modal-login').classList.remove('open'));
-
-document.getElementById('modal-login').addEventListener('click', e => {
-  if (e.target === e.currentTarget) document.getElementById('modal-login').classList.remove('open');
-});
-
-document.getElementById('btn-ingresar').addEventListener('click', () => {
-  const pwd = document.getElementById('admin-pwd').value;
-  if (pwd === ADMIN_PASSWORD) {
-    isAdmin = true;
-    document.getElementById('modal-login').classList.remove('open');
-    document.getElementById('admin-pwd').value = '';
-    document.getElementById('btn-admin').textContent = 'NUEVA ENTRADA';
-    document.getElementById('admin-panel').classList.add('visible');
-    renderPosts(allPosts);
-  } else {
-    const input = document.getElementById('admin-pwd');
-    input.style.borderColor = '#999';
-    setTimeout(() => { input.style.borderColor = ''; }, 800);
-  }
-});
-
-document.getElementById('admin-pwd').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('btn-ingresar').click();
-});
 
 // ── FORM ──
 function resetForm() {

@@ -422,8 +422,6 @@ document.getElementById('btn-entrar').addEventListener('click', () => {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, getDoc, setDoc, increment, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-// ── DESACTIVAMOS LAS NOTIFICACIONES (COMENTADO) ──
-// import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCOdpTR_Y-9eQoCJBlZ-OMybckIPqdstQo",
@@ -438,8 +436,6 @@ const app = initializeApp(firebaseConfig, 'fosa-app');
 const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-// ── DESACTIVAMOS EL SERVICIO DE MENSAJES ──
-// const messaging = getMessaging(app);
 
 let isAdmin = false;
 let editingId = null;
@@ -503,34 +499,6 @@ function formatFecha(ts) {
   const d = ts.toDate ? ts.toDate() : new Date(ts);
   return d.toLocaleDateString('es', { day:'2-digit', month:'short', year:'numeric' }) + ' · ' + d.toLocaleTimeString('es', { hour:'2-digit', minute:'2-digit' });
 }
-
-// ── DESACTIVAMOS LA SOLICITUD DE PERMISO DE NOTIFICACIONES ──
-/*
-async function requestNotificationPermission() {
-  try {
-    const token = await getToken(messaging, { 
-      vapidKey: "BHTbHz3hcIPushStuBLzB5LMrhwGyzEz6_AcoHSIzaTC5J40-JfalSUdpugCuHLeRos0TRr6XYvXEuXAZ6XQB2Y"
-    });
-    console.log("Token de notificaciones:", token);
-  } catch (err) {
-    console.error("Error al obtener el token:", err);
-  }
-}
-
-if (Notification.permission === 'granted') {
-  requestNotificationPermission();
-} else if (Notification.permission !== 'denied') {
-  Notification.requestPermission().then(permission => {
-    if (permission === 'granted') {
-      requestNotificationPermission();
-    }
-  });
-}
-
-onMessage(messaging, (payload) => {
-  console.log("Mensaje recibido en primer plano:", payload);
-});
-*/
 
 // ── LÓGICA DE LIKES (CORREGIDA PARA QUE NO SE CAIGAN) ──
 async function toggleLike(postId) {

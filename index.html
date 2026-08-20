@@ -13,17 +13,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="/blogdesasha/icon-512.png">
 
-<!-- ── VISTA PREVIA PARA REDES SOCIALES (OPEN GRAPH) ── -->
-<meta property="og:title" content="Blog de Sasha" />
-<meta property="og:description" content="El rincón personal de Sasha. Blog de estilo oscuro y foro de la comunidad." />
-<meta property="og:image" content="https://sangresasha.github.io/blogdesasha/icon-512.png?v=2" />
-<meta property="og:image:type" content="image/png" />
-<meta property="og:image:width" content="512" />
-<meta property="og:image:height" content="512" />
-<meta property="og:url" content="https://sangresasha.github.io/blogdesasha/" />
-<meta property="og:type" content="website" />
-<meta name="theme-color" content="#800000">
-
 <style>
 @font-face {
   font-family: 'PunkBabeDisplay';
@@ -283,6 +272,8 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
 
   <div class="nav-strip">
     <div class="nav-strip-inner">
+      <div class="nav-id">BLOG_DE_SASHA.LOG<span class="cursor"></span></div>
+      <!-- ELIMINADO EL TEXTO "BLOG_DE_SASHA.LOG", solo queda el cursor -->
       <div class="nav-id"><span class="cursor"></span></div>
       <div class="buttons-group">
         <button class="btn-foro" id="btn-ir-foro">FORO</button>
@@ -334,6 +325,7 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
         <a href="https://sangresasha.github.io/academiadelasartesoscuras/" class="btn-academia" target="_blank">VAMOS A LA ACADEMIA</a>
       </div>
       <div style="background: var(--surface); border: 1px solid var(--border2); padding: 1rem; border-radius: 4px;">
+        <!-- CAMBIO: Reproductor mini para que cargue rápido en celular -->
         <iframe width="100%" height="150" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2286284862&color=%230e1208&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=false&visual=false"></iframe>
         <div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/sangresasha" title="SANGRE SASHA" target="_blank" style="color: #cccccc; text-decoration: none;">SANGRE SASHA</a> · <a href="https://soundcloud.com/sangresasha/sets/pistas-similares-most-days-ft" title="Pistas similares: most days ft.capoxxo" target="_blank" style="color: #cccccc; text-decoration: none;">Pistas similares: most days ft.capoxxo</a></div>
       </div>
@@ -365,6 +357,8 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
 
   <div class="nav-strip">
     <div class="nav-strip-inner">
+      <div class="nav-id">FORO_DE_SASHA.LOG<span class="cursor"></span></div>
+      <!-- ELIMINADO EL TEXTO "FORO_DE_SASHA.LOG", solo queda el cursor -->
       <div class="nav-id"><span class="cursor"></span></div>
       <div class="buttons-group">
         <button class="btn-admin" id="btn-ir-blog">VOLVER AL BLOG</button>
@@ -373,15 +367,19 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
   </div>
 
   <main>
+    <!-- FORMULARIO PARA CREAR UN TEMA EN EL FORO -->
     <div class="foro-header">
       <div class="foro-header-title">// crear un nuevo tema</div>
       <div class="foro-nuevo-tema-form">
         <label>Tu nombre</label>
         <input type="text" id="foro-autor" placeholder="Anónimo…" maxlength="60">
+
         <label>Título del tema</label>
         <input type="text" id="foro-titulo" placeholder="Escribí el título…" maxlength="150">
+
         <label>Mensaje</label>
         <textarea id="foro-contenido" placeholder="Escribí tu mensaje…"></textarea>
+
         <button class="btn-foro-crear" id="btn-crear-tema">PUBLICAR TEMA</button>
         <span id="foro-status" style="font-size: 0.7rem; color: var(--text2); margin-left: 1rem;"></span>
       </div>
@@ -442,6 +440,7 @@ let editingId = null;
 let allPosts = [];
 let allForoPosts = [];
 
+// ── NAVEGACIÓN BLOG / FORO ──
 function goToBlog() {
   document.getElementById('page-blog').style.display = 'block';
   document.getElementById('page-foro').style.display = 'none';
@@ -453,6 +452,7 @@ function goToForo() {
 document.getElementById('btn-ir-foro').addEventListener('click', goToForo);
 document.getElementById('btn-ir-blog').addEventListener('click', goToBlog);
 
+// ── ESTADO DE AUTENTICACIÓN ──
 onAuthStateChanged(auth, (user) => {
   if (user) {
     isAdmin = true;
@@ -500,24 +500,9 @@ function formatFecha(ts) {
   return d.toLocaleDateString('es', { day:'2-digit', month:'short', year:'numeric' }) + ' · ' + d.toLocaleTimeString('es', { hour:'2-digit', minute:'2-digit' });
 }
 
-// ── LÓGICA DE LIKES (CORREGIDA PARA QUE NO SE CAIGAN) ──
-async function toggleLike(postId) {
-  const postRef = doc(db, 'fosa_posts', postId);
-  const likeKey = 'liked_' + postId;
-
-  try {
-    if (localStorage.getItem(likeKey) === 'true') {
-      await setDoc(postRef, { likes: increment(-1) }, { merge: true });
-      localStorage.removeItem(likeKey);
-    } else {
-      await setDoc(postRef, { likes: increment(1) }, { merge: true });
-      localStorage.setItem(likeKey, 'true');
-    }
-  } catch (e) {
-    console.error("Error al dar like:", e);
-  }
-}
-window.toggleLike = toggleLike;
+// ════════════════════════════════════════════
+// ── LÓGICA DEL BLOG DE SASHA ──
+// ════════════════════════════════════════════
 
 function renderComments(postId, comments) {
   const list = document.getElementById(`clist-${postId}`);
@@ -575,22 +560,10 @@ function renderPosts(posts) {
     card.style.animationDelay = (i * 0.06) + 's';
     let adminHTML = '';
     if (isAdmin) { adminHTML = `<div class="post-admin-actions"><button class="btn-edit" onclick="window.startEdit('${post.id}')">EDITAR</button><button class="btn-delete" onclick="window.deletePost('${post.id}')">ELIMINAR</button></div>`; }
-    
     card.innerHTML = `
       <div class="post-number">#${num} · ${esc(formatFecha(post.fecha))}</div>
       <h2 class="post-title">${esc(post.titulo)}</h2>
       <div class="post-meta"><span>Sasha S.</span><span>Blog de Sasha</span></div>
-      
-      <div class="like-container" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-        <button class="btn-like" onclick="toggleLike('${post.id}')" style="background: none; border: none; font-size: 1.5rem; color: var(--text);">
-          <span id="like-icon-${post.id}">${localStorage.getItem('liked_' + post.id) === 'true' ? '❤️' : '🤍'}</span>
-        </button>
-        <span id="like-count-${post.id}" style="font-family: var(--body); font-size: 1rem; color: var(--text);">
-          ${post.likes || 0}
-        </span>
-        <span style="font-size: 0.7rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em;">Likes</span>
-      </div>
-
       <div class="post-body-preview ${isLong ? 'collapsed' : ''}" id="preview-${post.id}">
         <div class="post-body" id="body-${post.id}"></div>
       </div>
@@ -616,28 +589,9 @@ function renderPosts(posts) {
 }
 
 const q = query(collection(db, 'fosa_posts'), orderBy('fecha', 'desc'));
-// CORREGIDO: El onSnapshot ya no borra y redibuja todo cuando hay un cambio en los likes
 onSnapshot(q, (snap) => {
   allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  const cont = document.getElementById('posts-container');
-  
-  // Si es la primera carga o no hay nada, dibujamos todo
-  if (!cont || cont.innerHTML.trim() === '' || cont.innerHTML.includes('loading')) {
-    renderPosts(allPosts);
-  } else {
-    // Si ya hay tarjetas, solo actualizamos los números de likes para evitar parpadeos
-    allPosts.forEach(post => {
-      const countEl = document.getElementById('like-count-' + post.id);
-      if (countEl) {
-        countEl.textContent = post.likes || 0;
-      }
-      // Actualizamos el icono solo si el usuario de esta PC no ha dado like aún
-      const iconEl = document.getElementById('like-icon-' + post.id);
-      if (iconEl && !localStorage.getItem('liked_' + post.id)) {
-        iconEl.textContent = '🤍';
-      }
-    });
-  }
+  renderPosts(allPosts);
 }, err => { console.error(err); const cont = document.getElementById('posts-container'); if (cont) cont.innerHTML = '<div class="loading">Error al cargar.</div>'; });
 
 window.togglePost = function(id) {
@@ -708,6 +662,7 @@ document.getElementById('btn-insert-img').addEventListener('click', () => {
 // ── LÓGICA DEL FORO DE LA COMUNIDAD ──
 // ════════════════════════════════════════════
 
+// 1. CREAR UN NUEVO TEMA EN EL FORO
 document.getElementById('btn-crear-tema').addEventListener('click', async () => {
   const autorEl = document.getElementById('foro-autor');
   const tituloEl = document.getElementById('foro-titulo');
@@ -730,6 +685,7 @@ document.getElementById('btn-crear-tema').addEventListener('click', async () => 
   btn.disabled = false; btn.textContent = 'PUBLICAR TEMA';
 });
 
+// 2. RENDERIZAR TEMAS DEL FORO
 function renderForoPosts(posts) {
   const cont = document.getElementById('foro-posts-container');
   const countEl = document.getElementById('foro-posts-count-label');
@@ -745,6 +701,7 @@ function renderForoPosts(posts) {
     card.className = 'post-card';
     card.style.animationDelay = (i * 0.06) + 's';
 
+    // HTML del Tema
     card.innerHTML = `
       <div class="post-number">#${num} · ${esc(formatFecha(post.fecha))}</div>
       <h2 class="post-title" style="font-size: clamp(1.5rem, 3vw, 2.2rem);">${esc(post.titulo)}</h2>
@@ -767,13 +724,14 @@ function renderForoPosts(posts) {
       </div>
     `;
     cont.appendChild(card);
-    
+
+    // Escuchamos los comentarios de ESTE tema en tiempo real
     const qComments = query(collection(db, 'foro_posts', post.id, 'comentarios'), orderBy('fecha', 'asc'));
     onSnapshot(qComments, (snap) => {
       const comments = snap.docs.map(d => d.data());
       const toggle = document.getElementById(`ftoggle-${post.id}`);
       if (toggle) toggle.innerHTML = `COMENTARIOS <span class="count-badge">(${comments.length})</span>`;
-      
+
       const list = document.getElementById(`flist-${post.id}`);
       if (!list) return;
       if (comments.length === 0) { list.innerHTML = `<div class="comment-empty">Sin respuestas aún.</div>`; return; }
@@ -788,6 +746,7 @@ function renderForoPosts(posts) {
   });
 }
 
+// 3. FUNCIONES DE COMENTARIOS DEL FORO
 window.toggleForoComments = function(postId) {
   const body = document.getElementById(`fbody-${postId}`);
   if (body) body.classList.toggle('open');
@@ -809,6 +768,7 @@ window.enviarComentarioForo = async function(postId) {
   btnEl.disabled = false; btnEl.textContent = 'RESPONDER';
 };
 
+// 4. ESCUCHAMOS LOS TEMAS DEL FORO
 const qForo = query(collection(db, 'foro_posts'), orderBy('fecha', 'desc'));
 onSnapshot(qForo, (snap) => {
   allForoPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));

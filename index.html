@@ -504,14 +504,13 @@ function formatFecha(ts) {
   return d.toLocaleDateString('es', { day:'2-digit', month:'short', year:'numeric' }) + ' · ' + d.toLocaleTimeString('es', { hour:'2-digit', minute:'2-digit' });
 }
 
-// ── NUEVO: SOLICITAR PERMISO Y REGISTRAR NOTIFICACIONES ──
+// ── SOLICITAR PERMISO Y REGISTRAR NOTIFICACIONES (CON LA VAPID PUESTA) ──
 async function requestNotificationPermission() {
   try {
     const token = await getToken(messaging, { 
-      vapidKey: BHTbHz3hcIPushStuBLzB5LMrhwGyzEz6_AcoHSIzaTC5J40-JfalSUdpugCuHLeRos0TRr6XYvXEuXAZ6XQB2Y // <--- Reemplazá esto con la clave que generaste en Firebase
+      vapidKey: "BHTbHz3hcIPushStuBLzB5LMrhwGyzEz6_AcoHSIzaTC5J40-JfalSUdpugCuHLeRos0TRr6XYvXEuXAZ6XQB2Y"
     });
     console.log("Token de notificaciones:", token);
-    // Aquí podrías guardar este 'token' en la base de datos para enviarle notificaciones específicas al usuario
   } catch (err) {
     console.error("Error al obtener el token:", err);
   }
@@ -521,7 +520,6 @@ async function requestNotificationPermission() {
 if (Notification.permission === 'granted') {
   requestNotificationPermission();
 } else if (Notification.permission !== 'denied') {
-  // Si aún no ha respondido, le pedimos permiso
   Notification.requestPermission().then(permission => {
     if (permission === 'granted') {
       requestNotificationPermission();
@@ -532,7 +530,6 @@ if (Notification.permission === 'granted') {
 // Escuchar notificaciones cuando la página está abierta (Foreground)
 onMessage(messaging, (payload) => {
   console.log("Mensaje recibido en primer plano:", payload);
-  // Podríamos mostrar un popup interno aquí si quisiéramos, por ejemplo.
 });
 
 // ── LÓGICA DE LIKES ──
@@ -651,9 +648,28 @@ function renderPosts(posts) {
 }
 
 const q = query(collection(db, 'fosa_posts'), orderBy('fecha', 'desc'));
+// CORREGIDO: El onSnapshot ya no borra y redibuja todo cuando hay un cambio en los likes
 onSnapshot(q, (snap) => {
   allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderPosts(allPosts);
+  const cont = document.getElementById('posts-container');
+  
+  // Si es la primera carga o no hay nada, dibujamos todo
+  if (!cont || cont.innerHTML.trim() === '' || cont.innerHTML.includes('loading')) {
+    renderPosts(allPosts);
+  } else {
+    // Si ya hay tarjetas, solo actualizamos los números de likes para evitar parpadeos
+    allPosts.forEach(post => {
+      const countEl = document.getElementById('like-count-' + post.id);
+      if (countEl) {
+        countEl.textContent = post.likes || 0;
+      }
+      // Actualizamos el icono solo si el usuario de esta PC no ha dado like aún
+      const iconEl = document.getElementById('like-icon-' + post.id);
+      if (iconEl && !localStorage.getItem('liked_' + post.id)) {
+        iconEl.textContent = '🤍';
+      }
+    });
+  }
 }, err => { console.error(err); const cont = document.getElementById('posts-container'); if (cont) cont.innerHTML = '<div class="loading">Error al cargar.</div>'; });
 
 window.togglePost = function(id) {

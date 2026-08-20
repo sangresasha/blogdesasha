@@ -56,10 +56,10 @@ body {
   background: url('picmix.com_2174009.gif') center/cover no-repeat;
   /* Mezcla de colores para integrar el rojo */
   mix-blend-mode: multiply;
-  /* Opacidad reducida para que se vea más suave */
-  opacity: 0.4;
-  /* Difuminado sutil para que las manchas no sean tan duras */
-  filter: blur(2px);
+  /* Opacidad bajada para que sea más suave */
+  opacity: 0.3;
+  /* Difuminado aumentado para que las manchas sean mucho más borrosas */
+  filter: blur(4px);
   z-index: 0;
   pointer-events: none;
 }
@@ -776,6 +776,15 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
       <h2 style="font-family: var(--display); font-size: 2.2rem; color: var(--text); text-align: center; margin-bottom: 1.5rem;">Escribime</h2>
       <div style="background: var(--surface); border: 1px solid var(--border2); padding: 1rem; border-radius: 4px;">
         <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScI4S0He_oly5Lx9QOKXuqkT-kWKrieGcF1-U9wbKFOT3io_g/viewform?embedded=true" width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0" style="background: white; border-radius: 4px;">Cargando…</iframe>
+      </div>
+    </div>
+
+    <!-- ── PLAYLIST DE SONIDO ── -->
+    <div class="music-section" style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+      <h2 style="font-family: var(--display); font-size: 2.2rem; color: var(--text); text-align: center; margin-bottom: 1.5rem;">Escuchá esto</h2>
+      <div style="background: var(--surface); border: 1px solid var(--border2); padding: 1rem; border-radius: 4px;">
+        <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2286284862&color=%230e1208&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+        <div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/sangresasha" title="SANGRE SASHA" target="_blank" style="color: #cccccc; text-decoration: none;">SANGRE SASHA</a> · <a href="https://soundcloud.com/sangresasha/sets/pistas-similares-most-days-ft" title="Pistas similares: most days ft.capoxxo" target="_blank" style="color: #cccccc; text-decoration: none;">Pistas similares: most days ft.capoxxo</a></div>
       </div>
     </div>
 

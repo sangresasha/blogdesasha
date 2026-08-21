@@ -11,8 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="/blogdesasha/icon-512.png">
 
-<!-- 🔒 DOMPurify para seguridad en comentarios -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+<!-- 🔒 ELIMINADO DOMPURIFY - Ya no es necesario -->
 
 <style>
 /* ... (El CSS es exactamente el mismo que ya tienes) ... */
@@ -300,14 +299,21 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
 </div>
 
 <script>
-// ── SONIDO DE RESIDENT EVIL EN CADA CLIC ──
+// ── SONIDO DE RESIDENT EVIL EN BOTONES ESPECÍFICOS ──
 let sonidoRE = new Audio('/blogdesasha/resident-evil-2-inventario.mp3');
 sonidoRE.volume = 0.5;
 
-document.addEventListener('click', function() {
+function reproducirSonidoRE() {
   sonidoRE.currentTime = 0;
   sonidoRE.play().catch(e => {});
-});
+}
+
+// Suena al hacer clic en ENTRAR
+document.getElementById('btn-entrar').addEventListener('click', reproducirSonidoRE);
+// Suena al hacer clic en FORO
+document.getElementById('btn-ir-foro').addEventListener('click', reproducirSonidoRE);
+// Suena al hacer clic en VOLVER AL BLOG
+document.getElementById('btn-ir-blog').addEventListener('click', reproducirSonidoRE);
 
 // ── NOTIFICACIONES LOCALES (NATIVAS) ──
 document.getElementById('btn-notify').addEventListener('click', () => {
@@ -492,6 +498,17 @@ async function contarVisita() {
 contarVisita();
 
 function esc(str) { return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+// ── NUEVA FUNCIÓN DE SEGURIDAD (Permite GIFs pero bloquea scripts) ──
+function convertirImagenes(texto) {
+    let seguro = esc(texto);
+    seguro = seguro.replace(
+        /&lt;img src=&quot;(.*?)&quot; alt=&quot;(.*?)&quot; style=&quot;(.*?)&quot;&gt;/g,
+        '<img src="$1" alt="$2" style="$3">'
+    );
+    return seguro;
+}
+
 function formatFecha(ts) {
   if (!ts) return '—';
   const d = ts.toDate ? ts.toDate() : new Date(ts);
@@ -513,8 +530,8 @@ function renderComments(postId, comments) {
   comments.forEach(c => {
     const div = document.createElement('div');
     div.className = 'comment-item';
-    // 🔒 SEGURO: Usamos DOMPurify para permitir imágenes pero bloquear scripts
-    div.innerHTML = `<div class="comment-autor">${esc(c.autor)}<span class="comment-fecha">${esc(formatFecha(c.fecha))}</span></div><div class="comment-texto">${DOMPurify.sanitize(c.texto)}</div>`;
+    // 🔒 SEGURO: Usamos convertirImagenes para permitir imágenes pero bloquear scripts
+    div.innerHTML = `<div class="comment-autor">${esc(c.autor)}<span class="comment-fecha">${esc(formatFecha(c.fecha))}</span></div><div class="comment-texto">${convertirImagenes(c.texto)}</div>`;
     list.appendChild(div);
   });
 }
@@ -702,7 +719,7 @@ function renderForoPosts(posts) {
       <div class="post-number">#${num} · ${esc(formatFecha(post.fecha))}</div>
       <h2 class="post-title" style="font-size: clamp(1.5rem, 3vw, 2.2rem);">${esc(post.titulo)}</h2>
       <div class="post-meta"><span>${esc(post.autor)}</span><span>Foro de Sasha</span></div>
-     <div class="post-body" style="font-size: 0.95rem; margin-bottom: 1rem;">${DOMPurify.sanitize(post.contenido)}</div>
+     <div class="post-body" style="font-size: 0.95rem; margin-bottom: 1rem;">${convertirImagenes(post.contenido)}</div>
       
       <div class="comments-section">
         <button class="comments-toggle" id="ftoggle-${post.id}" onclick="toggleForoComments('${post.id}')">
@@ -758,8 +775,8 @@ function renderForoPosts(posts) {
       comments.forEach(c => {
         const div = document.createElement('div');
         div.className = 'comment-item';
-        // 🔒 SEGURO: Usamos DOMPurify para permitir imágenes pero bloquear scripts
-        div.innerHTML = `<div class="comment-autor">${esc(c.autor)}<span class="comment-fecha">${esc(formatFecha(c.fecha))}</span></div><div class="comment-texto">${DOMPurify.sanitize(c.texto)}</div>`;
+        // 🔒 SEGURO: Usamos convertirImagenes para permitir imágenes pero bloquear scripts
+        div.innerHTML = `<div class="comment-autor">${esc(c.autor)}<span class="comment-fecha">${esc(formatFecha(c.fecha))}</span></div><div class="comment-texto">${convertirImagenes(c.texto)}</div>`;
         list.appendChild(div);
       });
     });

@@ -1,24 +1,41 @@
-const q = query(collection(db, 'fosa_posts'), orderBy('fecha', 'desc'));
-// CORREGIDO: El onSnapshot ya no borra y redibuja todo cuando hay un cambio en los likes
-onSnapshot(q, (snap) => {
-  allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  const cont = document.getElementById('posts-container');
-  
-  // Si es la primera carga o no hay nada, dibujamos todo
-  if (!cont || cont.innerHTML.trim() === '' || cont.innerHTML.includes('loading')) {
-    renderPosts(allPosts);
-  } else {
-    // Si ya hay tarjetas, solo actualizamos los números de likes para evitar parpadeos
-    allPosts.forEach(post => {
-      const countEl = document.getElementById('like-count-' + post.id);
-      if (countEl) {
-        countEl.textContent = post.likes || 0;
-      }
-      // Actualizamos el icono solo si el usuario de esta PC no ha dado like aún
-      const iconEl = document.getElementById('like-icon-' + post.id);
-      if (iconEl && !localStorage.getItem('liked_' + post.id)) {
-        iconEl.textContent = '🤍';
-      }
-    });
-  }
-}, err => { console.error(err); const cont = document.getElementById('posts-container'); if (cont) cont.innerHTML = '<div class="loading">Error al cargar.</div>'; });
+// sw.js
+const CACHE_NAME = 'sasha-blog-v1';
+const urlsToCache = [
+  '/blogdesasha/',
+  '/blogdesasha/index.html',
+  '/blogdesasha/manifest.json',
+  '/blogdesasha/icon-512.png',
+  // Si tienes otros archivos (CSS, fuentes) agrégalos aquí
+];
+
+// Instalación: cachear recursos
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        console.log('Cache abierto');
+        return cache.addAll(urlsToCache);
+      })
+      .then(() => self.skipWaiting())
+  );
+});
+
+// Activación: limpiar caches viejos
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.filter(name => name !== CACHE_NAME)
+          .map(name => caches.delete(name))
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+// Fetch: responder con cache o red
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => response || fetch(event.request))
+  );
+});

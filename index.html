@@ -702,7 +702,7 @@ function renderForoPosts(posts) {
       <div class="post-number">#${num} · ${esc(formatFecha(post.fecha))}</div>
       <h2 class="post-title" style="font-size: clamp(1.5rem, 3vw, 2.2rem);">${esc(post.titulo)}</h2>
       <div class="post-meta"><span>${esc(post.autor)}</span><span>Foro de Sasha</span></div>
-      <div class="post-body" style="font-size: 0.95rem; margin-bottom: 1rem;">${esc(post.contenido)}</div>
+     <div class="post-body" style="font-size: 0.95rem; margin-bottom: 1rem;">${DOMPurify.sanitize(post.contenido)}</div>
       
       <div class="comments-section">
         <button class="comments-toggle" id="ftoggle-${post.id}" onclick="toggleForoComments('${post.id}')">

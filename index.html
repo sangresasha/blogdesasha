@@ -14,6 +14,7 @@
 <link rel="apple-touch-icon" href="/blogdesasha/icon-512.png">
 
 <style>
+/* ... (El CSS es exactamente el mismo que ya tienes) ... */
 @font-face {
   font-family: 'PunkBabeDisplay';
   src: url('fonts/PUNKBABE TRIAL.ttf') format('truetype');
@@ -127,12 +128,12 @@ header { border-bottom: 1px solid var(--border); position: relative; overflow: h
 .nav-id { font-family: var(--body); font-size: 0.7rem; color: var(--text); letter-spacing: 0.15em; padding: 0.8rem 0; text-transform: uppercase; }
 .nav-strip-inner .buttons-group { display: flex; gap: 0.5rem; }
 
-.btn-admin, .btn-foro {
+.btn-admin, .btn-foro, .btn-notify {
   font-family: var(--body); font-size: 0.7rem; letter-spacing: 0.12em;
   color: var(--text); background: none; border: 1px solid var(--border2);
   padding: 0.35rem 0.9rem; transition: all 0.2s; text-transform: uppercase;
 }
-.btn-admin:hover, .btn-foro:hover { background: rgba(0,0,0,0.1); border-color: var(--text); }
+.btn-admin:hover, .btn-foro:hover, .btn-notify:hover { background: rgba(0,0,0,0.1); border-color: var(--text); }
 
 /* ── BOTÓN DEL FORO MÁS GRANDE ── */
 .btn-foro {
@@ -272,11 +273,11 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
 
   <div class="nav-strip">
     <div class="nav-strip-inner">
-      <div class="nav-id">BLOG_DE_SASHA.LOG<span class="cursor"></span></div>
-      <!-- ELIMINADO EL TEXTO "BLOG_DE_SASHA.LOG", solo queda el cursor -->
+      <!-- SOLO EL CURSOR, TEXTO ELIMINADO -->
       <div class="nav-id"><span class="cursor"></span></div>
       <div class="buttons-group">
         <button class="btn-foro" id="btn-ir-foro">FORO</button>
+        <button class="btn-notify" id="btn-notify">ACTIVAR NOTIF.</button>
         <button class="btn-admin" id="btn-admin">ACCESO ADMIN</button>
       </div>
     </div>
@@ -325,7 +326,6 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
         <a href="https://sangresasha.github.io/academiadelasartesoscuras/" class="btn-academia" target="_blank">VAMOS A LA ACADEMIA</a>
       </div>
       <div style="background: var(--surface); border: 1px solid var(--border2); padding: 1rem; border-radius: 4px;">
-        <!-- CAMBIO: Reproductor mini para que cargue rápido en celular -->
         <iframe width="100%" height="150" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2286284862&color=%230e1208&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=false&visual=false"></iframe>
         <div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/sangresasha" title="SANGRE SASHA" target="_blank" style="color: #cccccc; text-decoration: none;">SANGRE SASHA</a> · <a href="https://soundcloud.com/sangresasha/sets/pistas-similares-most-days-ft" title="Pistas similares: most days ft.capoxxo" target="_blank" style="color: #cccccc; text-decoration: none;">Pistas similares: most days ft.capoxxo</a></div>
       </div>
@@ -357,8 +357,7 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
 
   <div class="nav-strip">
     <div class="nav-strip-inner">
-      <div class="nav-id">FORO_DE_SASHA.LOG<span class="cursor"></span></div>
-      <!-- ELIMINADO EL TEXTO "FORO_DE_SASHA.LOG", solo queda el cursor -->
+      <!-- SOLO EL CURSOR, TEXTO ELIMINADO -->
       <div class="nav-id"><span class="cursor"></span></div>
       <div class="buttons-group">
         <button class="btn-admin" id="btn-ir-blog">VOLVER AL BLOG</button>
@@ -367,19 +366,15 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
   </div>
 
   <main>
-    <!-- FORMULARIO PARA CREAR UN TEMA EN EL FORO -->
     <div class="foro-header">
       <div class="foro-header-title">// crear un nuevo tema</div>
       <div class="foro-nuevo-tema-form">
         <label>Tu nombre</label>
         <input type="text" id="foro-autor" placeholder="Anónimo…" maxlength="60">
-
         <label>Título del tema</label>
         <input type="text" id="foro-titulo" placeholder="Escribí el título…" maxlength="150">
-
         <label>Mensaje</label>
         <textarea id="foro-contenido" placeholder="Escribí tu mensaje…"></textarea>
-
         <button class="btn-foro-crear" id="btn-crear-tema">PUBLICAR TEMA</button>
         <span id="foro-status" style="font-size: 0.7rem; color: var(--text2); margin-left: 1rem;"></span>
       </div>
@@ -420,6 +415,8 @@ document.getElementById('btn-entrar').addEventListener('click', () => {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, getDoc, setDoc, increment, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+// ── IMPORTAMOS LAS NOTIFICACIONES PUSH ──
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCOdpTR_Y-9eQoCJBlZ-OMybckIPqdstQo",
@@ -434,13 +431,14 @@ const app = initializeApp(firebaseConfig, 'fosa-app');
 const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+// ── INICIALIZAMOS EL SERVICIO DE MENSAJES ──
+const messaging = getMessaging(app);
 
 let isAdmin = false;
 let editingId = null;
 let allPosts = [];
 let allForoPosts = [];
 
-// ── NAVEGACIÓN BLOG / FORO ──
 function goToBlog() {
   document.getElementById('page-blog').style.display = 'block';
   document.getElementById('page-foro').style.display = 'none';
@@ -452,7 +450,6 @@ function goToForo() {
 document.getElementById('btn-ir-foro').addEventListener('click', goToForo);
 document.getElementById('btn-ir-blog').addEventListener('click', goToBlog);
 
-// ── ESTADO DE AUTENTICACIÓN ──
 onAuthStateChanged(auth, (user) => {
   if (user) {
     isAdmin = true;
@@ -499,6 +496,38 @@ function formatFecha(ts) {
   const d = ts.toDate ? ts.toDate() : new Date(ts);
   return d.toLocaleDateString('es', { day:'2-digit', month:'short', year:'numeric' }) + ' · ' + d.toLocaleTimeString('es', { hour:'2-digit', minute:'2-digit' });
 }
+
+// ── BOTÓN PARA ACTIVAR NOTIFICACIONES PUSH ──
+document.getElementById('btn-notify').addEventListener('click', async () => {
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      const token = await getToken(messaging, { 
+        vapidKey: "BHTbHz3hcIPushStuBLzB5LMrhwGyzEz6_AcoHSIzaTC5J40-JfalSUdpugCuHLeRos0TRr6XYvXEuXAZ6XQB2Y"
+      });
+      console.log("Token de notificaciones:", token);
+      // Aquí puedes guardar este token en tu base de datos para enviarle notificaciones específicas a este usuario
+      new Notification("Blog de Sasha", {
+        body: "¡Notificaciones activadas! Te avisaremos cuando haya novedades.",
+        icon: "/blogdesasha/icon-512.png"
+      });
+    } else {
+      alert("No diste permiso a las notificaciones.");
+    }
+  } catch (err) {
+    console.error("Error al activar notificaciones:", err);
+  }
+});
+
+// Escuchar notificaciones cuando la página está abierta
+onMessage(messaging, (payload) => {
+  console.log("Mensaje recibido en primer plano:", payload);
+  // Mostrar notificación en primer plano
+  new Notification(payload.notification.title, {
+    body: payload.notification.body,
+    icon: "/blogdesasha/icon-512.png"
+  });
+});
 
 // ════════════════════════════════════════════
 // ── LÓGICA DEL BLOG DE SASHA ──
@@ -662,7 +691,6 @@ document.getElementById('btn-insert-img').addEventListener('click', () => {
 // ── LÓGICA DEL FORO DE LA COMUNIDAD ──
 // ════════════════════════════════════════════
 
-// 1. CREAR UN NUEVO TEMA EN EL FORO
 document.getElementById('btn-crear-tema').addEventListener('click', async () => {
   const autorEl = document.getElementById('foro-autor');
   const tituloEl = document.getElementById('foro-titulo');
@@ -685,7 +713,6 @@ document.getElementById('btn-crear-tema').addEventListener('click', async () => 
   btn.disabled = false; btn.textContent = 'PUBLICAR TEMA';
 });
 
-// 2. RENDERIZAR TEMAS DEL FORO
 function renderForoPosts(posts) {
   const cont = document.getElementById('foro-posts-container');
   const countEl = document.getElementById('foro-posts-count-label');
@@ -701,7 +728,6 @@ function renderForoPosts(posts) {
     card.className = 'post-card';
     card.style.animationDelay = (i * 0.06) + 's';
 
-    // HTML del Tema
     card.innerHTML = `
       <div class="post-number">#${num} · ${esc(formatFecha(post.fecha))}</div>
       <h2 class="post-title" style="font-size: clamp(1.5rem, 3vw, 2.2rem);">${esc(post.titulo)}</h2>
@@ -725,7 +751,6 @@ function renderForoPosts(posts) {
     `;
     cont.appendChild(card);
 
-    // Escuchamos los comentarios de ESTE tema en tiempo real
     const qComments = query(collection(db, 'foro_posts', post.id, 'comentarios'), orderBy('fecha', 'asc'));
     onSnapshot(qComments, (snap) => {
       const comments = snap.docs.map(d => d.data());
@@ -746,7 +771,6 @@ function renderForoPosts(posts) {
   });
 }
 
-// 3. FUNCIONES DE COMENTARIOS DEL FORO
 window.toggleForoComments = function(postId) {
   const body = document.getElementById(`fbody-${postId}`);
   if (body) body.classList.toggle('open');
@@ -768,7 +792,6 @@ window.enviarComentarioForo = async function(postId) {
   btnEl.disabled = false; btnEl.textContent = 'RESPONDER';
 };
 
-// 4. ESCUCHAMOS LOS TEMAS DEL FORO
 const qForo = query(collection(db, 'foro_posts'), orderBy('fecha', 'desc'));
 onSnapshot(qForo, (snap) => {
   allForoPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));

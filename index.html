@@ -11,6 +11,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="/blogdesasha/icon-512.png">
 
+<!-- 🔒 DOMPurify para seguridad en comentarios -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+
 <style>
 /* ... (El CSS es exactamente el mismo que ya tienes) ... */
 @font-face { font-family: 'PunkBabeDisplay'; src: url('fonts/PUNKBABE TRIAL.ttf') format('truetype'); font-weight: normal; font-style: normal; font-display: block; }
@@ -510,7 +513,8 @@ function renderComments(postId, comments) {
   comments.forEach(c => {
     const div = document.createElement('div');
     div.className = 'comment-item';
-    div.innerHTML = `<div class="comment-autor">${esc(c.autor)}<span class="comment-fecha">${esc(formatFecha(c.fecha))}</span></div><div class="comment-texto">${esc(c.texto)}</div>`;
+    // 🔒 SEGURO: Usamos DOMPurify para permitir imágenes pero bloquear scripts
+    div.innerHTML = `<div class="comment-autor">${esc(c.autor)}<span class="comment-fecha">${esc(formatFecha(c.fecha))}</span></div><div class="comment-texto">${DOMPurify.sanitize(c.texto)}</div>`;
     list.appendChild(div);
   });
 }
@@ -754,7 +758,8 @@ function renderForoPosts(posts) {
       comments.forEach(c => {
         const div = document.createElement('div');
         div.className = 'comment-item';
-        div.innerHTML = `<div class="comment-autor">${esc(c.autor)}<span class="comment-fecha">${esc(formatFecha(c.fecha))}</span></div><div class="comment-texto">${esc(c.texto)}</div>`;
+        // 🔒 SEGURO: Usamos DOMPurify para permitir imágenes pero bloquear scripts
+        div.innerHTML = `<div class="comment-autor">${esc(c.autor)}<span class="comment-fecha">${esc(formatFecha(c.fecha))}</span></div><div class="comment-texto">${DOMPurify.sanitize(c.texto)}</div>`;
         list.appendChild(div);
       });
     });

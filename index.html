@@ -37,7 +37,7 @@ header { border-bottom: 1px solid var(--border); position: relative; overflow: h
 .header-title { font-family: var(--display); font-size: clamp(3rem, 8vw, 6rem); color: var(--text); line-height: 0.95; }
 .header-sub { font-family: var(--body); font-size: 0.75rem; color: var(--text2); letter-spacing: 0.15em; margin-top: 1rem; text-transform: uppercase; }
 .header-right { text-align: right; padding-bottom: 0.5rem; }
-.header-stat { font-family: var(--body); font-size: 0.7rem; color: var(--text); letter-spacing: 0.1em; line-height: 2; text-transform: uppercase; background: var(--surface); border: 1px solid var(--border2); padding: 0.5rem 1rem; border-radius: 2px; }
+.header-stat { font-family: var(--body); font-size: 0.7rem; color: var(--text); letter-spacing: 0.1em; line-height: 2; text-transform: uppercase; background: var(--surface); border: 1px solid var(--border2); padding: 0.5rem 1rem; border-radius: 2px; margin-top: 0.8rem; }
 .header-stat strong { color: var(--text); font-size: 1.1rem; font-weight: 600; display: block; letter-spacing: 0; }
 .nav-strip { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; position: sticky; top: 0; z-index: 100; }
 .nav-strip-inner { max-width: 960px; width: 100%; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
@@ -155,6 +155,11 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
         <div class="header-stat"><strong id="post-count">—</strong>ENTRADAS</div>
         <div class="header-stat" style="margin-top:0.8rem;"><strong id="vistas-count">—</strong>VISTAS</div>
         <div class="header-stat" style="margin-top:0.8rem;"><strong id="reloj">00:00</strong>HORA LOCAL</div>
+
+        <!-- PLAYLIST "MUSIKITAH" (SIN AUTOPLAY, CON SHUFFLE) -->
+        <div style="margin-top: 1rem; color: var(--text); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;">MUSIKITAH</div>
+        <iframe width="100%" height="90" scrolling="no" frameborder="no" allow="encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2286284862&color=%230e1208&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false&shuffle=true"></iframe>
+
       </div>
     </div>
   </header>
@@ -208,16 +213,11 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
       </div>
     </div>
 
-    <div class="music-section" style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border);">
-      <div style="text-align: center; width: 100%;">
-        <a href="https://sangresasha.github.io/academiadelasartesoscuras/" class="btn-academia" target="_blank">VAMOS A LA ACADEMIA</a>
-      </div>
-      <div style="background: var(--surface); border: 1px solid var(--border2); padding: 1rem; border-radius: 4px;">
-        <!-- CAMBIO: Reproductor mini con ALEATORIO ACTIVADO -->
-        <iframe width="100%" height="150" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2286284862&color=%230e1208&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=false&visual=false&shuffle=true"></iframe>
-        <div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/sangresasha" title="SANGRE SASHA" target="_blank" style="color: #cccccc; text-decoration: none;">SANGRE SASHA</a> · <a href="https://soundcloud.com/sangresasha/sets/pistas-similares-most-days-ft" title="Pistas similares: most days ft.capoxxo" target="_blank" style="color: #cccccc; text-decoration: none;">Pistas similares: most days ft.capoxxo</a></div>
-      </div>
+    <!-- BOTÓN DE LA ACADEMIA (ABAJO) -->
+    <div class="music-section" style="margin-top: 4rem; text-align: center; border-top: 1px solid var(--border); padding-top: 2rem;">
+      <a href="https://sangresasha.github.io/academiadelasartesoscuras/" class="btn-academia" target="_blank">VAMOS A LA ACADEMIA</a>
     </div>
+
   </main>
 
   <footer>
@@ -261,7 +261,6 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
         <label>Título del tema</label>
         <input type="text" id="foro-titulo" placeholder="Escribí el título…" maxlength="150">
         
-        <!-- NUEVO: Botón para subir imágenes en el foro -->
         <div class="image-upload-group">
           <input type="file" id="foro-img-input" accept="image/*">
           <button class="btn-publish" id="btn-insert-foro-img" style="padding: 0.4rem 1rem; font-size: 0.7rem;">INSERTAR IMAGEN</button>
@@ -271,7 +270,6 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
         <label>Mensaje</label>
         <textarea id="foro-contenido" placeholder="Escribí tu mensaje…"></textarea>
         
-        <!-- NUEVO: GIFs debajo de la caja de texto -->
         <div style="margin-top: 0.8rem;">
           <div style="font-size: 0.7rem; color: var(--text2); text-transform: uppercase; margin-bottom: 0.5rem;">GIFs Disponibles</div>
           <div id="gif-container" style="display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
@@ -301,7 +299,7 @@ footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; }
 <script>
 // ── SONIDO DE RESIDENT EVIL EN CADA CLIC ──
 let sonidoRE = new Audio('/blogdesasha/resident-evil-2-inventario.mp3');
-sonidoRE.volume = 0.5; // Puedes bajar el volumen si molesta mucho (0.0 a 1.0)
+sonidoRE.volume = 0.5;
 
 document.addEventListener('click', function() {
   sonidoRE.currentTime = 0;
@@ -326,10 +324,9 @@ document.getElementById('btn-notify').addEventListener('click', () => {
   });
 });
 
-// ── LISTA DE GIFS DISPONIBLES (Agrega aquí los nombres de tus GIFs) ──
+// ── LISTA DE GIFS DISPONIBLES ──
 const gifsDisponibles = ['baila.gif', 'bochi.gif', 'comida.gif', 'coso.gif', 'hunk.gif', 'llora.gif', 'meme.gif', 'meme2.gif', 'pipi.gif', 'shinji.gif', 'tails.gif'];
 
-// Generar los GIFs automáticamente
 const gifContainer = document.getElementById('gif-container');
 gifsDisponibles.forEach(gifName => {
   const img = document.createElement('img');
@@ -341,14 +338,45 @@ gifsDisponibles.forEach(gifName => {
   gifContainer.appendChild(img);
 });
 
-// ── FUNCIÓN PARA INSERTAR GIFS EN EL FORO ──
+// ── FUNCIÓN PARA INSERTAR GIFS EN LOS COMENTARIOS ──
+function insertarGifEn(textareaId, url) {
+  const textarea = document.getElementById(textareaId);
+  if (textarea) {
+    textarea.value += `\n<img src="${url}" alt="GIF" style="max-width: 100%; height: auto; border-radius: 4px; margin: 0.5rem 0;">\n`;
+  }
+}
+window.insertarGifEn = insertarGifEn;
+
+// ── FUNCIÓN PARA SUBIR IMÁGENES EN LOS COMENTARIOS ──
+function insertarComentarioImg(postId) {
+  const input = document.getElementById(`foro-comment-img-${postId}`);
+  const status = document.getElementById(`coment-img-status-${postId}`);
+  const file = input.files[0];
+
+  if (!file) { status.textContent = 'Seleccioná una imagen primero.'; return; }
+  if (file.size > 600 * 1024) { status.textContent = '❌ Imagen muy pesada (máximo 600 KB).'; return; }
+
+  status.textContent = '⏳ Convirtiendo...';
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const base64String = e.target.result;
+    const textarea = document.getElementById(`ftxt-${postId}`);
+    const imgTag = `\n<img src="${base64String}" alt="Imagen" style="max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: 4px; margin: 0.5rem 0;">\n`;
+    textarea.value += imgTag;
+    status.textContent = '✅ Imagen insertada!';
+    input.value = '';
+    setTimeout(() => status.textContent = '', 4000);
+  };
+  reader.readAsDataURL(file);
+}
+window.insertarComentarioImg = insertarComentarioImg;
+
 function insertarGif(url) {
   const textarea = document.getElementById('foro-contenido');
   textarea.value += `\n<img src="${url}" alt="GIF" style="max-width: 100%; height: auto; border-radius: 4px; margin: 0.5rem 0;">\n`;
 }
 window.insertarGif = insertarGif;
 
-// ── FUNCIÓN PARA SUBIR IMÁGENES EN EL FORO ──
 document.getElementById('btn-insert-foro-img').addEventListener('click', () => {
   const input = document.getElementById('foro-img-input');
   const status = document.getElementById('foro-img-status');
@@ -389,7 +417,6 @@ document.getElementById('btn-entrar').addEventListener('click', () => {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, getDoc, setDoc, increment, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-// ELIMINADO: importación de Firebase Messaging (getMessaging, getToken, onMessage)
 
 const firebaseConfig = {
   apiKey: "AIzaSyCOdpTR_Y-9eQoCJBlZ-OMybckIPqdstQo",
@@ -404,7 +431,6 @@ const app = initializeApp(firebaseConfig, 'fosa-app');
 const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-// ELIMINADO: const messaging = getMessaging(app);
 
 let isAdmin = false;
 let editingId = null;
@@ -684,6 +710,30 @@ function renderForoPosts(posts) {
             <div class="comment-form-title">// dejar una respuesta</div>
             <input type="text" id="faut-${post.id}" placeholder="Nombre o seudónimo…" maxlength="60">
             <textarea id="ftxt-${post.id}" placeholder="Escribí tu respuesta…" maxlength="1000"></textarea>
+            
+            <!-- BOTÓN E INPUT PARA SUBIR IMAGEN EN COMENTARIOS -->
+            <div class="image-upload-group">
+              <input type="file" id="foro-comment-img-${post.id}" accept="image/*">
+              <button class="btn-publish" onclick="insertarComentarioImg('${post.id}')" style="padding: 0.4rem 1rem; font-size: 0.7rem;">INSERTAR IMAGEN</button>
+              <span id="coment-img-status-${post.id}" style="font-size: 0.7rem; color: var(--text2);"></span>
+            </div>
+
+            <!-- FILA DE GIFS PARA COMENTARIOS -->
+            <div style="margin-top: 0.5rem; display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center;">
+              <span style="font-size: 0.6rem; color: var(--text2);">GIFs:</span>
+              <img src="/blogdesasha/gifs/baila.gif" onclick="insertarGifEn('ftxt-${post.id}', '/blogdesasha/gifs/baila.gif')" style="height: 30px; cursor: pointer; border: 1px solid var(--border2);">
+              <img src="/blogdesasha/gifs/bochi.gif" onclick="insertarGifEn('ftxt-${post.id}', '/blogdesasha/gifs/bochi.gif')" style="height: 30px; cursor: pointer; border: 1px solid var(--border2);">
+              <img src="/blogdesasha/gifs/comida.gif" onclick="insertarGifEn('ftxt-${post.id}', '/blogdesasha/gifs/comida.gif')" style="height: 30px; cursor: pointer; border: 1px solid var(--border2);">
+              <img src="/blogdesasha/gifs/coso.gif" onclick="insertarGifEn('ftxt-${post.id}', '/blogdesasha/gifs/coso.gif')" style="height: 30px; cursor: pointer; border: 1px solid var(--border2);">
+              <img src="/blogdesasha/gifs/hunk.gif" onclick="insertarGifEn('ftxt-${post.id}', '/blogdesasha/gifs/hunk.gif')" style="height: 30px; cursor: pointer; border: 1px solid var(--border2);">
+              <img src="/blogdesasha/gifs/llora.gif" onclick="insertarGifEn('ftxt-${post.id}', '/blogdesasha/gifs/llora.gif')" style="height: 30px; cursor: pointer; border: 1px solid var(--border2);">
+              <img src="/blogdesasha/gifs/meme.gif" onclick="insertarGifEn('ftxt-${post.id}', '/blogdesasha/gifs/meme.gif')" style="height: 30px; cursor: pointer; border: 1px solid var(--border2);">
+              <img src="/blogdesasha/gifs/meme2.gif" onclick="insertarGifEn('ftxt-${post.id}', '/blogdesasha/gifs/meme2.gif')" style="height: 30px; cursor: pointer; border: 1px solid var(--border2);">
+              <img src="/blogdesasha/gifs/pipi.gif" onclick="insertarGifEn('ftxt-${post.id}', '/blogdesasha/gifs/pipi.gif')" style="height: 30px; cursor: pointer; border: 1px solid var(--border2);">
+              <img src="/blogdesasha/gifs/shinji.gif" onclick="insertarGifEn('ftxt-${post.id}', '/blogdesasha/gifs/shinji.gif')" style="height: 30px; cursor: pointer; border: 1px solid var(--border2);">
+              <img src="/blogdesasha/gifs/tails.gif" onclick="insertarGifEn('ftxt-${post.id}', '/blogdesasha/gifs/tails.gif')" style="height: 30px; cursor: pointer; border: 1px solid var(--border2);">
+            </div>
+
             <button class="btn-comentar" id="fbtn-${post.id}" onclick="enviarComentarioForo('${post.id}')">RESPONDER</button>
           </div>
         </div>
